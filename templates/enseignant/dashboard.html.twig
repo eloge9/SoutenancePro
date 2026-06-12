@@ -73,7 +73,7 @@
                         <td><strong>{{ s.date|date('d/m/Y') }}</strong></td>
                         <td>{{ s.heure|date('H:i') }}</td>
                         <td>{{ s.etudiant ? s.etudiant.nom ~ ' ' ~ s.etudiant.prenom : '—' }}</td>
-                        <td>{{ s.salle ? s.salle.code : '—' }}</td>
+                        <td>{{ s.salle ? s.salle.nom : '—' }}</td>
                         <td>
                             {% if item.role == 'Président' %}
                                 <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">Président</span>

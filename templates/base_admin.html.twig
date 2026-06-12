@@ -27,7 +27,7 @@
 
                     <div class="header-right clearfix">
                         <div class="options-box clearfix">
-                            <div class="profile-box dropdown" id="adminProfileBox">
+                            <div class="profile-box dropdown" id="someElementID5">
                                 <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     <span class="profile-image" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#ff5773;color:#fff;font-weight:700;font-size:15px;vertical-align:middle;">
                                         {{ app.user ? app.user.email|first|upper : 'A' }}
@@ -182,4 +182,21 @@
 <!-- End Hidden Navigation Bar -->
 
 {% block javascripts %}{{ parent() }}{% endblock %}
+
+<script>
+(function () {
+    var box = document.getElementById('someElementID5');
+    if (!box) return;
+    var toggle = box.querySelector('.dropdown-toggle');
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        box.classList.toggle('dropdown-active');
+    });
+    document.addEventListener('click', function (e) {
+        if (!box.contains(e.target)) {
+            box.classList.remove('dropdown-active');
+        }
+    });
+})();
+</script>
 {% endblock %}

@@ -101,7 +101,7 @@
                                 {{ soutenance.etudiant.themeMemoire|slice(0,45) }}{% if soutenance.etudiant.themeMemoire|length > 45 %}…{% endif %}
                             {% else %}&mdash;{% endif %}
                         </td>
-                        <td>{{ soutenance.salle ? soutenance.salle.code : '—' }}</td>
+                        <td>{{ soutenance.salle ? soutenance.salle.nom : '—' }}</td>
                         <td>
                             <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" title="Voir" style="color:#ff5773;margin-right:8px;">
                                 <i class="fa fa-eye"></i>

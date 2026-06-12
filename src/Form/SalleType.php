@@ -16,10 +16,10 @@ class SalleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code', TextType::class, [
-                'label' => 'Code de la salle',
-                'constraints' => [new NotBlank(['message' => 'Le code est obligatoire'])],
-                'attr' => ['placeholder' => 'ex: A101, AMPHI-B'],
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la salle',
+                'constraints' => [new NotBlank(['message' => 'Le nom est obligatoire'])],
+                'attr' => ['placeholder' => 'ex: Amphithéâtre A, Salle de conférence…'],
             ])
             ->add('capacite', IntegerType::class, [
                 'label' => 'Capacité (nombre de places)',

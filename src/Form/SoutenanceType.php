@@ -52,7 +52,7 @@ class SoutenanceType extends AbstractType
             ->add('salle', EntityType::class, [
                 'class' => Salle::class,
                 'label' => 'Salle',
-                'choice_label' => fn(Salle $s) => $s->getCode() . ' (' . $s->getLocalisation() . ', ' . $s->getCapacite() . ' places)',
+                'choice_label' => fn(Salle $s) => $s->getNom() . ' [' . $s->getCode() . '] — ' . $s->getLocalisation() . ' (' . $s->getCapacite() . ' places)',
                 'placeholder' => '-- Sélectionner une salle --',
             ])
             ->add('president', EntityType::class, [

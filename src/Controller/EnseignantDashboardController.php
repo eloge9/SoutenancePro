@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Enseignant;
+use App\Entity\Soutenance;
 use App\Repository\SoutenanceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +72,32 @@ class EnseignantDashboardController extends AbstractController
             'soutenancesPresident'   => $enseignant->getSoutenancesPresident()->toArray(),
             'soutenancesExaminateur' => $enseignant->getSoutenancesExaminateur()->toArray(),
             'soutenancesEncadreur'   => $enseignant->getSoutenancesEncadreur()->toArray(),
+        ]);
+    }
+
+    #[Route('/soutenances/{id}', name: 'enseignant_soutenance_show', requirements: ['id' => '\d+'])]
+    public function soutenanceShow(Soutenance $soutenance): Response
+    {
+        $enseignant = $this->getEnseignant();
+        if (!$enseignant) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Vérifie que l'enseignant est bien membre du jury
+        $isPresident   = $soutenance->getPresident()?->getId()   === $enseignant->getId();
+        $isExaminateur = $soutenance->getExaminateur()?->getId() === $enseignant->getId();
+        $isEncadreur   = $soutenance->getEncadreur()?->getId()   === $enseignant->getId();
+
+        if (!$isPresident && !$isExaminateur && !$isEncadreur) {
+            $this->addFlash('error', 'Vous n\'êtes pas membre du jury de cette soutenance.');
+            return $this->redirectToRoute('enseignant_soutenances');
+        }
+
+        $role = $isPresident ? 'Président' : ($isExaminateur ? 'Examinateur' : 'Encadreur');
+
+        return $this->render('enseignant/soutenance_show.html.twig', [
+            'soutenance' => $soutenance,
+            'role'       => $role,
         ]);
     }
 

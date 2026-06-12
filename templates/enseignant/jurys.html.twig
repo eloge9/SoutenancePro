@@ -29,7 +29,7 @@
                             {{ s.etudiant.themeMemoire|slice(0,55) }}{% if s.etudiant.themeMemoire|length > 55 %}…{% endif %}
                         {% else %}&mdash;{% endif %}
                     </td>
-                    <td>{{ s.salle ? s.salle.code : '—' }}</td>
+                    <td>{{ s.salle ? s.salle.nom : '—' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

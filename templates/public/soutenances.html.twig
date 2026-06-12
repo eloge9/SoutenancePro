@@ -107,10 +107,17 @@
                                     </div>
                                     <div class="pull-right" style="text-align:right;">
                                         <div style="font-size:22px;font-weight:700;">{{ soutenance.heure|date('H:i') }}</div>
-                                        <div style="font-size:13px;opacity:.9;">
+                                        {% if soutenance.salle %}
+                                        <div style="font-size:13px;font-weight:600;opacity:1;">
                                             <i class="flaticon-location" style="margin-right:3px;"></i>
-                                            {{ soutenance.salle ? soutenance.salle.code : '—' }}
+                                            {{ soutenance.salle.nom }}
                                         </div>
+                                        <div style="font-size:11px;opacity:.8;margin-top:2px;">
+                                            {{ soutenance.salle.localisation }}
+                                        </div>
+                                        {% else %}
+                                        <div style="font-size:13px;opacity:.9;">—</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

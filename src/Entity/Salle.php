@@ -18,15 +18,16 @@ class Salle
     #[ORM\Column(length: 50)]
     private ?string $code = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
+
     #[ORM\Column]
     private ?int $capacite = null;
 
     #[ORM\Column(length: 255)]
     private ?string $localisation = null;
 
-    /**
-     * @var Collection<int, Soutenance>
-     */
+    /** @var Collection<int, Soutenance> */
     #[ORM\OneToMany(targetEntity: Soutenance::class, mappedBy: 'salle')]
     private Collection $soutenances;
 
@@ -48,7 +49,17 @@ class Salle
     public function setCode(string $code): static
     {
         $this->code = $code;
+        return $this;
+    }
 
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
         return $this;
     }
 
@@ -60,7 +71,6 @@ class Salle
     public function setCapacite(int $capacite): static
     {
         $this->capacite = $capacite;
-
         return $this;
     }
 
@@ -72,13 +82,10 @@ class Salle
     public function setLocalisation(string $localisation): static
     {
         $this->localisation = $localisation;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Soutenance>
-     */
+    /** @return Collection<int, Soutenance> */
     public function getSoutenances(): Collection
     {
         return $this->soutenances;
@@ -90,19 +97,16 @@ class Salle
             $this->soutenances->add($soutenance);
             $soutenance->setSalle($this);
         }
-
         return $this;
     }
 
     public function removeSoutenance(Soutenance $soutenance): static
     {
         if ($this->soutenances->removeElement($soutenance)) {
-            // set the owning side to null (unless already changed)
             if ($soutenance->getSalle() === $this) {
                 $soutenance->setSalle(null);
             }
         }
-
         return $this;
     }
 }

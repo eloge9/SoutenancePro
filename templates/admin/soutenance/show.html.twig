@@ -24,7 +24,7 @@
                 <div style="font-size:18px;color:#71718a;">{{ soutenance.heure|date('H:i') }}</div>
                 <div style="margin-top:10px;">
                     <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600;">
-                        <i class="flaticon-location" style="margin-right:4px;"></i>{{ soutenance.salle ? soutenance.salle.code : '—' }}
+                        <i class="flaticon-location" style="margin-right:4px;"></i>{{ soutenance.salle ? soutenance.salle.nom : '—' }}
                     </span>
                 </div>
                 {% if soutenance.salle %}

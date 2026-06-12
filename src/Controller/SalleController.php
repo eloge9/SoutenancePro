@@ -32,15 +32,13 @@ class SalleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($repo->findByCodeExcept($salle->getCode()) !== null) {
-                $this->addFlash('error', 'Ce code de salle existe déjà.');
-                return $this->render('admin/salle/new.html.twig', ['form' => $form]);
-            }
+            $code = sprintf('SALLE-%03d', $repo->count([]) + 1);
+            $salle->setCode($code);
 
             $em->persist($salle);
             $em->flush();
 
-            $this->addFlash('success', 'Salle « ' . $salle->getCode() . ' » créée avec succès.');
+            $this->addFlash('success', 'Salle « ' . $salle->getNom() . ' » créée (code : ' . $code . ').');
             return $this->redirectToRoute('admin_salle_index');
         }
 
@@ -54,20 +52,13 @@ class SalleController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'admin_salle_edit', requirements: ['id' => '\d+'])]
-    public function edit(Request $request, Salle $salle, EntityManagerInterface $em, SalleRepository $repo): Response
+    public function edit(Request $request, Salle $salle, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(SalleType::class, $salle);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $existing = $repo->findByCodeExcept($salle->getCode(), $salle->getId());
-            if ($existing !== null) {
-                $this->addFlash('error', 'Ce code de salle est déjà utilisé.');
-                return $this->render('admin/salle/edit.html.twig', ['form' => $form, 'salle' => $salle]);
-            }
-
             $em->flush();
-
             $this->addFlash('success', 'Salle modifiée avec succès.');
             return $this->redirectToRoute('admin_salle_show', ['id' => $salle->getId()]);
         }
