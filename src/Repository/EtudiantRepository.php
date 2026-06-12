@@ -16,28 +16,46 @@ class EtudiantRepository extends ServiceEntityRepository
         parent::__construct($registry, Etudiant::class);
     }
 
-//    /**
-//     * @return Etudiant[] Returns an array of Etudiant objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /** @return Etudiant[] */
+    public function findAllOrderedByNom(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.nom', 'ASC')
+            ->addOrderBy('e.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Etudiant
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /** @return Etudiant[] */
+    public function findBySearch(string $search): array
+    {
+        $term = '%' . $search . '%';
+
+        return $this->createQueryBuilder('e')
+            ->where('e.nom LIKE :term OR e.prenom LIKE :term OR e.email LIKE :term')
+            ->setParameter('term', $term)
+            ->orderBy('e.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Retourne les étudiants sans soutenance (+ optionnellement l'étudiant actuel).
+     *
+     * @return Etudiant[]
+     */
+    public function findSansSoutenance(?int $excludeEtudiantId = null): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.soutenances', 's')
+            ->where('s.id IS NULL')
+            ->orderBy('e.nom', 'ASC');
+
+        if ($excludeEtudiantId !== null) {
+            $qb->orWhere('e.id = :excludeId')
+               ->setParameter('excludeId', $excludeEtudiantId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

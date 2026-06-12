@@ -1,83 +1,83 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Liste des enseignants{% endblock %}
-{% block page_title %}Enseignants{% endblock %}
+{% block title %}Enseignants{% endblock %}
+{% block page_title %}Gestion des enseignants{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_enseignant_new') }}" class="theme-btn btn-style-one" style="padding:8px 20px;font-size:13px;">
+        <span class="txt"><i class="fa fa-plus" style="margin-right:5px;"></i>Ajouter un enseignant</span>
+    </a>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Liste des enseignants</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Enseignants
-        </div>
-    </div>
-    <a href="{{ path('admin_enseignant_new') }}" class="btn-primary-custom">
-        <i class="fa fa-plus"></i> Ajouter un enseignant
-    </a>
-</div>
 
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="flaticon-instructor mr-2"></i> {{ enseignants|length }} enseignant(s)</h5>
-    </div>
-    <div class="table-card-body">
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:0;">
         {% if enseignants|length > 0 %}
-            <table class="table-soutenance">
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin:0;font-size:13px;">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nom complet</th>
-                        <th>Email</th>
+                    <tr style="background:#f8f9fd;color:#71718a;font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
+                        <th style="padding:15px 20px;">Enseignant</th>
+                        <th>E-mail</th>
                         <th>Spécialité</th>
-                        <th>Compte utilisateur</th>
-                        <th>Actions</th>
+                        <th>Compte</th>
+                        <th style="text-align:right;padding-right:20px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for enseignant in enseignants %}
-                        <tr>
-                            <td>{{ enseignant.id }}</td>
-                            <td><strong>{{ enseignant.nom }} {{ enseignant.prenom }}</strong></td>
-                            <td>{{ enseignant.email }}</td>
-                            <td>{{ enseignant.specialite }}</td>
-                            <td>
-                                {% if enseignant.compte %}
-                                    <span style="color: #2ed573; font-size: 12px;">
-                                        <i class="fa fa-check-circle"></i> {{ enseignant.compte.email }}
-                                    </span>
-                                {% else %}
-                                    <span style="color: #aaa; font-size: 12px;">Aucun compte</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ path('admin_enseignant_show', {id: enseignant.id}) }}" class="btn-action btn-view" title="Voir">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a href="{{ path('admin_enseignant_edit', {id: enseignant.id}) }}" class="btn-action btn-edit" title="Modifier">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form method="post" action="{{ path('admin_enseignant_delete', {id: enseignant.id}) }}"
-                                      style="display:inline;"
-                                      onsubmit="return confirm('Supprimer cet enseignant ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ enseignant.id) }}">
-                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td style="padding:14px 20px;">
+                            <strong>{{ enseignant.nom }} {{ enseignant.prenom }}</strong>
+                        </td>
+                        <td style="color:#71718a;">{{ enseignant.email }}</td>
+                        <td>
+                            <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;">
+                                {{ enseignant.specialite }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if enseignant.compte %}
+                                <span style="background:#e8f8e8;color:#27ae60;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;">
+                                    <i class="fa fa-check" style="margin-right:3px;"></i>Actif
+                                </span>
+                            {% else %}
+                                <span style="background:#f8e8e8;color:#e74c3c;border-radius:20px;padding:3px 10px;font-size:12px;">
+                                    <i class="fa fa-times" style="margin-right:3px;"></i>Aucun
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:right;padding-right:20px;">
+                            <a href="{{ path('admin_enseignant_show', {id: enseignant.id}) }}" title="Voir" style="color:#71718a;margin-right:8px;">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ path('admin_enseignant_edit', {id: enseignant.id}) }}" title="Modifier" style="color:#ff9066;margin-right:8px;">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <form method="post" action="{{ path('admin_enseignant_delete', {id: enseignant.id}) }}" style="display:inline;"
+                                  onsubmit="return confirm('Supprimer cet enseignant et son compte ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ enseignant.id) }}">
+                                <button type="submit" title="Supprimer" style="background:none;border:none;cursor:pointer;color:#e74c3c;padding:0;">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         {% else %}
-            <div style="padding: 40px; text-align: center; color: #aaa;">
-                <i class="flaticon-instructor" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
-                <p>Aucun enseignant enregistré.</p>
-                <a href="{{ path('admin_enseignant_new') }}" class="btn-primary-custom">
-                    <i class="fa fa-plus"></i> Ajouter le premier enseignant
-                </a>
-            </div>
+        <div style="text-align:center;padding:50px;color:#71718a;">
+            <span class="flaticon-instructor" style="font-size:48px;color:#e0e0e0;display:block;margin-bottom:15px;"></span>
+            <p>Aucun enseignant enregistré.</p>
+            <a href="{{ path('admin_enseignant_new') }}" class="theme-btn btn-style-one" style="margin-top:10px;display:inline-block;">
+                <span class="txt">Ajouter le premier enseignant</span>
+            </a>
+        </div>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}

@@ -1,63 +1,58 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Modifier la salle{% endblock %}
-{% block page_title %}Salles{% endblock %}
+{% block title %}Modifier {{ salle.code }}{% endblock %}
+{% block page_title %}Modifier la salle{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_salle_show', {id: salle.id}) }}" style="color:#71718a;font-size:13px;">
+        <i class="fa fa-arrow-left" style="margin-right:5px;"></i>Retour au détail
+    </a>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Modifier la salle : {{ salle.code }}</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
-            <a href="{{ path('admin_salle_index') }}">Salles</a> ›
-            Modifier
+
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:30px 35px;max-width:600px;">
+        <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:25px;padding-bottom:15px;border-bottom:1px solid #f0f0f0;">
+            <i class="flaticon-location" style="color:#ff5773;margin-right:8px;"></i>Salle {{ salle.code }}
+        </h6>
+
+        {{ form_start(form, {'attr': {'class': 'setting-form'}}) }}
+
+        <div class="row clearfix">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.code, 'Code de la salle') }}
+                    {{ form_widget(form.code) }}
+                    {{ form_errors(form.code) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.capacite, 'Capacité') }}
+                    {{ form_widget(form.capacite, {'attr': {'min': 1}}) }}
+                    {{ form_errors(form.capacite) }}
+                </div>
+            </div>
         </div>
-    </div>
-    <div style="display:flex; gap:10px;">
-        <a href="{{ path('admin_salle_show', {id: salle.id}) }}" class="btn-secondary-custom">
-            <i class="fa fa-eye"></i> Voir
-        </a>
-        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-arrow-left"></i> Retour
-        </a>
+
+        <div class="form-group">
+            {{ form_label(form.localisation, 'Localisation') }}
+            {{ form_widget(form.localisation) }}
+            {{ form_errors(form.localisation) }}
+        </div>
+
+        <div class="form-group" style="margin-top:10px;">
+            <button type="submit" class="theme-btn btn-style-one" style="padding:10px 40px;border:none;cursor:pointer;">
+                <span class="txt"><i class="fa fa-save" style="margin-right:5px;"></i>Enregistrer</span>
+            </button>
+            <a href="{{ path('admin_salle_show', {id: salle.id}) }}" class="theme-btn btn-style-two" style="padding:10px 30px;margin-left:10px;">
+                <span class="txt">Annuler</span>
+            </a>
+        </div>
+
+        {{ form_end(form) }}
     </div>
 </div>
 
-<div class="form-card">
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_label(form.code, 'Code de la salle') }}
-                {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.code) }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_label(form.capacite, 'Capacité') }}
-                {{ form_widget(form.capacite, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.capacite) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.localisation, 'Localisation') }}
-        {{ form_widget(form.localisation, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.localisation) }}
-    </div>
-
-    <div class="form-actions">
-        <button type="submit" class="btn-primary-custom">
-            <i class="fa fa-save"></i> Enregistrer les modifications
-        </button>
-        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-times"></i> Annuler
-        </a>
-    </div>
-
-    {{ form_end(form) }}
-</div>
 {% endblock %}

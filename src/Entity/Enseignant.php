@@ -31,15 +31,23 @@ class Enseignant
     #[ORM\JoinColumn(nullable: false)]
     private ?User $compte = null;
 
-    /**
-     * @var Collection<int, Soutenance>
-     */
+    /** @var Collection<int, Soutenance> */
     #[ORM\OneToMany(targetEntity: Soutenance::class, mappedBy: 'president')]
-    private Collection $soutenances;
+    private Collection $soutenancesPresident;
+
+    /** @var Collection<int, Soutenance> */
+    #[ORM\OneToMany(targetEntity: Soutenance::class, mappedBy: 'examinateur')]
+    private Collection $soutenancesExaminateur;
+
+    /** @var Collection<int, Soutenance> */
+    #[ORM\OneToMany(targetEntity: Soutenance::class, mappedBy: 'encadreur')]
+    private Collection $soutenancesEncadreur;
 
     public function __construct()
     {
-        $this->soutenances = new ArrayCollection();
+        $this->soutenancesPresident   = new ArrayCollection();
+        $this->soutenancesExaminateur = new ArrayCollection();
+        $this->soutenancesEncadreur   = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,7 +63,6 @@ class Enseignant
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -67,7 +74,6 @@ class Enseignant
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -79,7 +85,6 @@ class Enseignant
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -91,7 +96,6 @@ class Enseignant
     public function setSpecialite(string $specialite): static
     {
         $this->specialite = $specialite;
-
         return $this;
     }
 
@@ -103,37 +107,24 @@ class Enseignant
     public function setCompte(?User $compte): static
     {
         $this->compte = $compte;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Soutenance>
-     */
-    public function getSoutenances(): Collection
+    /** @return Collection<int, Soutenance> */
+    public function getSoutenancesPresident(): Collection
     {
-        return $this->soutenances;
+        return $this->soutenancesPresident;
     }
 
-    public function addSoutenance(Soutenance $soutenance): static
+    /** @return Collection<int, Soutenance> */
+    public function getSoutenancesExaminateur(): Collection
     {
-        if (!$this->soutenances->contains($soutenance)) {
-            $this->soutenances->add($soutenance);
-            $soutenance->setPresident($this);
-        }
-
-        return $this;
+        return $this->soutenancesExaminateur;
     }
 
-    public function removeSoutenance(Soutenance $soutenance): static
+    /** @return Collection<int, Soutenance> */
+    public function getSoutenancesEncadreur(): Collection
     {
-        if ($this->soutenances->removeElement($soutenance)) {
-            // set the owning side to null (unless already changed)
-            if ($soutenance->getPresident() === $this) {
-                $soutenance->setPresident(null);
-            }
-        }
-
-        return $this;
+        return $this->soutenancesEncadreur;
     }
 }

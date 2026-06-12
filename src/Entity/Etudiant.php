@@ -121,6 +121,11 @@ class Etudiant
         return $this;
     }
 
+    public function getSoutenance(): ?Soutenance
+    {
+        return $this->soutenances->first() ?: null;
+    }
+
     /**
      * @return Collection<int, Soutenance>
      */

@@ -1,112 +1,148 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Soutenance de {{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}{% endblock %}
-{% block page_title %}Soutenances{% endblock %}
+{% block title %}Soutenance de {{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : 'N/A' }}{% endblock %}
+{% block page_title %}Détail soutenance{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_soutenance_edit', {id: soutenance.id}) }}" class="theme-btn btn-style-one" style="padding:7px 18px;font-size:13px;margin-right:8px;">
+        <span class="txt"><i class="fa fa-pencil" style="margin-right:4px;"></i>Modifier</span>
+    </a>
+    <a href="{{ path('admin_soutenance_index') }}" style="color:#71718a;font-size:13px;">
+        <i class="fa fa-arrow-left" style="margin-right:5px;"></i>Liste
+    </a>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Soutenance : {{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
-            <a href="{{ path('admin_soutenance_index') }}">Soutenances</a> ›
-            Détail
-        </div>
-    </div>
-    <div style="display:flex; gap:10px;">
-        <a href="{{ path('admin_soutenance_edit', {id: soutenance.id}) }}" class="btn-primary-custom">
-            <i class="fa fa-pencil"></i> Modifier
-        </a>
-        <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-arrow-left"></i> Retour
-        </a>
-    </div>
-</div>
 
-<!-- Infos principales -->
-<div class="row">
-    <div class="col-md-8">
-        <div class="detail-card" style="margin-bottom: 20px;">
-            <div style="font-weight: 700; color: #555; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px;">
-                <i class="fa fa-info-circle mr-2" style="color: #6c5ffc;"></i> Informations générales
-            </div>
-
-            <div class="detail-row">
-                <div class="detail-label">Étudiant</div>
-                <div class="detail-value">
-                    <strong>{{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</strong>
-                    <div style="font-size: 12px; color: #888; margin-top: 2px;">
-                        {{ soutenance.etudiant.filiere }} — {{ soutenance.etudiant.email }}
+<!-- Date / Salle -->
+<div class="row clearfix">
+    <div class="col-lg-4 col-md-6">
+        <div class="sidebar-widget" style="margin-bottom:20px;">
+            <div class="widget-content" style="padding:20px 25px;text-align:center;">
+                <div class="flaticon-schedule" style="font-size:36px;color:#ff5773;margin-bottom:10px;"></div>
+                <div style="font-size:26px;font-weight:700;color:#0f0e2d;">{{ soutenance.date|date('d/m/Y') }}</div>
+                <div style="font-size:18px;color:#71718a;">{{ soutenance.heure|date('H:i') }}</div>
+                <div style="margin-top:10px;">
+                    <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:600;">
+                        <i class="flaticon-location" style="margin-right:4px;"></i>{{ soutenance.salle ? soutenance.salle.code : '—' }}
+                    </span>
+                </div>
+                {% if soutenance.salle %}
+                    <div style="font-size:12px;color:#aaa;margin-top:5px;">
+                        {{ soutenance.salle.localisation }} — {{ soutenance.salle.capacite }} places
                     </div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Thème du mémoire</div>
-                <div class="detail-value">{{ soutenance.etudiant.themeMemoire }}</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Date</div>
-                <div class="detail-value">{{ soutenance.date|date('d/m/Y') }}</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Heure</div>
-                <div class="detail-value">{{ soutenance.heure|date('H:i') }}</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Salle</div>
-                <div class="detail-value">
-                    <span style="font-family: monospace; font-size: 16px; font-weight: 700; color: #6c5ffc;">
-                        {{ soutenance.salle.code }}
-                    </span>
-                    <span style="color: #888; font-size: 12px; margin-left: 8px;">
-                        — {{ soutenance.salle.localisation }} ({{ soutenance.salle.capacite }} places)
-                    </span>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <!-- Composition du Jury -->
-        <div class="detail-card">
-            <div style="font-weight: 700; color: #555; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px;">
-                <i class="fa fa-users mr-2" style="color: #6c5ffc;"></i> Jury
-            </div>
-
-            <div style="margin-bottom: 15px; padding: 12px; background: rgba(108,95,252,0.08); border-radius: 8px; border-left: 3px solid #6c5ffc;">
-                <div style="font-size: 11px; color: #6c5ffc; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Président</div>
-                <div style="font-weight: 600; color: #333;">
-                    {{ soutenance.president.nom }} {{ soutenance.president.prenom }}
-                </div>
-                <div style="font-size: 12px; color: #888;">{{ soutenance.president.specialite }}</div>
-            </div>
-
-            <div style="margin-bottom: 15px; padding: 12px; background: rgba(44,176,255,0.08); border-radius: 8px; border-left: 3px solid #2cb0ff;">
-                <div style="font-size: 11px; color: #2cb0ff; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Examinateur</div>
-                <div style="font-weight: 600; color: #333;">
-                    {{ soutenance.examinateur.nom }} {{ soutenance.examinateur.prenom }}
-                </div>
-                <div style="font-size: 12px; color: #888;">{{ soutenance.examinateur.specialite }}</div>
-            </div>
-
-            <div style="padding: 12px; background: rgba(46,213,115,0.08); border-radius: 8px; border-left: 3px solid #2ed573;">
-                <div style="font-size: 11px; color: #2ed573; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Encadreur</div>
-                <div style="font-weight: 600; color: #333;">
-                    {{ soutenance.encadreur.nom }} {{ soutenance.encadreur.prenom }}
-                </div>
-                <div style="font-size: 12px; color: #888;">{{ soutenance.encadreur.specialite }}</div>
+    <!-- Étudiant -->
+    <div class="col-lg-8 col-md-6">
+        <div class="sidebar-widget" style="margin-bottom:20px;">
+            <div class="widget-content" style="padding:20px 25px;">
+                <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;">
+                    <i class="flaticon-student" style="color:#ff5773;margin-right:8px;"></i>Étudiant
+                </h6>
+                {% if soutenance.etudiant %}
+                <table style="width:100%;font-size:13px;line-height:2;">
+                    <tr>
+                        <td style="color:#71718a;width:35%;">Nom</td>
+                        <td><strong>{{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="color:#71718a;">Filière</td>
+                        <td>
+                            <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">
+                                {{ soutenance.etudiant.filiere }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:#71718a;">Thème</td>
+                        <td style="color:#555;">{{ soutenance.etudiant.themeMemoire }}</td>
+                    </tr>
+                    {% if soutenance.etudiant.fichierMemoire %}
+                    <tr>
+                        <td style="color:#71718a;">Mémoire</td>
+                        <td>
+                            <a href="{{ asset('uploads/memoires/' ~ soutenance.etudiant.fichierMemoire) }}" target="_blank" style="color:#ff5773;">
+                                <i class="fa fa-file-pdf-o" style="margin-right:4px;"></i>Télécharger le PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+                {% else %}
+                <p style="color:#aaa;font-size:13px;">Aucun étudiant associé.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<div style="margin-top: 10px;">
-    <form method="post" action="{{ path('admin_soutenance_delete', {id: soutenance.id}) }}"
-          onsubmit="return confirm('Supprimer cette soutenance ?');">
+<!-- Jury -->
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:25px 30px;">
+        <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+            <i class="flaticon-instructor" style="color:#ff5773;margin-right:8px;"></i>Composition du jury
+        </h6>
+        <div class="row clearfix">
+
+            <div class="col-lg-4 col-md-12" style="margin-bottom:15px;">
+                <div style="padding:15px;background:#fff0f3;border-radius:8px;border-left:4px solid #ff5773;">
+                    <div style="font-size:11px;text-transform:uppercase;color:#ff5773;font-weight:700;letter-spacing:1px;margin-bottom:8px;">
+                        <i class="fa fa-star" style="margin-right:4px;"></i>Président
+                    </div>
+                    {% if soutenance.president %}
+                        <div style="font-size:14px;font-weight:600;color:#0f0e2d;">{{ soutenance.president.prenom }} {{ soutenance.president.nom }}</div>
+                        <div style="font-size:12px;color:#71718a;">{{ soutenance.president.specialite }}</div>
+                    {% else %}
+                        <div style="color:#aaa;font-size:13px;">Non défini</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12" style="margin-bottom:15px;">
+                <div style="padding:15px;background:#fff5f0;border-radius:8px;border-left:4px solid #ff9066;">
+                    <div style="font-size:11px;text-transform:uppercase;color:#ff9066;font-weight:700;letter-spacing:1px;margin-bottom:8px;">
+                        <i class="fa fa-user" style="margin-right:4px;"></i>Examinateur
+                    </div>
+                    {% if soutenance.examinateur %}
+                        <div style="font-size:14px;font-weight:600;color:#0f0e2d;">{{ soutenance.examinateur.prenom }} {{ soutenance.examinateur.nom }}</div>
+                        <div style="font-size:12px;color:#71718a;">{{ soutenance.examinateur.specialite }}</div>
+                    {% else %}
+                        <div style="color:#aaa;font-size:13px;">Non défini</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12" style="margin-bottom:15px;">
+                <div style="padding:15px;background:#fffbf0;border-radius:8px;border-left:4px solid #f0c142;">
+                    <div style="font-size:11px;text-transform:uppercase;color:#f0c142;font-weight:700;letter-spacing:1px;margin-bottom:8px;">
+                        <i class="fa fa-graduation-cap" style="margin-right:4px;"></i>Encadreur
+                    </div>
+                    {% if soutenance.encadreur %}
+                        <div style="font-size:14px;font-weight:600;color:#0f0e2d;">{{ soutenance.encadreur.prenom }} {{ soutenance.encadreur.nom }}</div>
+                        <div style="font-size:12px;color:#71718a;">{{ soutenance.encadreur.specialite }}</div>
+                    {% else %}
+                        <div style="color:#aaa;font-size:13px;">Non défini</div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Actions -->
+<div style="margin-top:20px;">
+    <form method="post" action="{{ path('admin_soutenance_delete', {id: soutenance.id}) }}" style="display:inline;"
+          onsubmit="return confirm('Annuler et supprimer définitivement cette soutenance ?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ soutenance.id) }}">
-        <button type="submit" class="btn-danger-custom">
-            <i class="fa fa-trash mr-1"></i> Supprimer cette soutenance
+        <button type="submit" style="background:none;border:1px solid #e74c3c;color:#e74c3c;padding:7px 18px;border-radius:50px;font-size:13px;cursor:pointer;">
+            <i class="fa fa-trash-o" style="margin-right:5px;"></i>Annuler cette soutenance
         </button>
     </form>
 </div>
+
 {% endblock %}

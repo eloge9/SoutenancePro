@@ -1,99 +1,115 @@
 {% extends 'base_admin.html.twig' %}
 
 {% block title %}Modifier la soutenance{% endblock %}
-{% block page_title %}Soutenances{% endblock %}
+{% block page_title %}Modifier la soutenance{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" style="color:#71718a;font-size:13px;">
+        <i class="fa fa-arrow-left" style="margin-right:5px;"></i>Retour au détail
+    </a>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+.setting-form .form-group input[type="date"],
+.setting-form .form-group input[type="time"] {
+    position:relative;display:block;width:100%;line-height:28px;
+    padding:10px 25px;color:#888;border:1px solid transparent;
+    height:46px;font-size:14px;border-radius:50px;background:#f5fbff;
+    transition:all 300ms ease;font-family:'Roboto',sans-serif;
+}
+.setting-form .form-group select { cursor:pointer; }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Modifier la soutenance de {{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
-            <a href="{{ path('admin_soutenance_index') }}">Soutenances</a> ›
-            Modifier
+
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:30px 35px;">
+        <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:25px;padding-bottom:15px;border-bottom:1px solid #f0f0f0;">
+            <i class="flaticon-schedule" style="color:#ff5773;margin-right:8px;"></i>
+            {% if soutenance.etudiant %}
+                Soutenance de {{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}
+            {% else %}
+                Modifier la soutenance
+            {% endif %}
+        </h6>
+
+        {{ form_start(form, {'attr': {'class': 'setting-form'}}) }}
+
+        <div class="row clearfix">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.date, 'Date de soutenance') }}
+                    {{ form_widget(form.date) }}
+                    {{ form_errors(form.date) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.heure, 'Heure de début') }}
+                    {{ form_widget(form.heure) }}
+                    {{ form_errors(form.heure) }}
+                </div>
+            </div>
         </div>
-    </div>
-    <div style="display:flex; gap:10px;">
-        <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" class="btn-secondary-custom">
-            <i class="fa fa-eye"></i> Voir
-        </a>
-        <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-arrow-left"></i> Retour
-        </a>
+
+        <div class="row clearfix">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.etudiant, 'Étudiant') }}
+                    {{ form_widget(form.etudiant) }}
+                    {{ form_errors(form.etudiant) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.salle, 'Salle') }}
+                    {{ form_widget(form.salle) }}
+                    {{ form_errors(form.salle) }}
+                </div>
+            </div>
+        </div>
+
+        <h6 style="color:#0f0e2d;font-weight:700;margin:20px 0 15px;padding-top:15px;border-top:1px solid #f0f0f0;">
+            Composition du jury
+        </h6>
+
+        <div class="row clearfix">
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.president, 'Président') }}
+                    {{ form_widget(form.president) }}
+                    {{ form_errors(form.president) }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.examinateur, 'Examinateur') }}
+                    {{ form_widget(form.examinateur) }}
+                    {{ form_errors(form.examinateur) }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.encadreur, 'Encadreur') }}
+                    {{ form_widget(form.encadreur) }}
+                    {{ form_errors(form.encadreur) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:15px;">
+            <button type="submit" class="theme-btn btn-style-one" style="padding:10px 40px;border:none;cursor:pointer;">
+                <span class="txt"><i class="fa fa-save" style="margin-right:5px;"></i>Enregistrer</span>
+            </button>
+            <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" class="theme-btn btn-style-two" style="padding:10px 30px;margin-left:10px;">
+                <span class="txt">Annuler</span>
+            </a>
+        </div>
+
+        {{ form_end(form) }}
     </div>
 </div>
 
-<div class="form-card" style="max-width: 800px;">
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
-    <div class="form-group">
-        {{ form_label(form.etudiant, 'Étudiant') }}
-        {{ form_widget(form.etudiant, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.etudiant) }}
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {{ form_label(form.date, 'Date de soutenance') }}
-                {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.date) }}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                {{ form_label(form.heure, 'Heure de début') }}
-                {{ form_widget(form.heure, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.heure) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.salle, 'Salle') }}
-        {{ form_widget(form.salle, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.salle) }}
-    </div>
-
-    <div style="margin: 20px 0 10px; padding: 12px 0 5px; border-top: 1px solid #f0f0f8;">
-        <strong style="color: #555; font-size: 14px;">
-            <i class="fa fa-users mr-2"></i> Composition du jury
-        </strong>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_label(form.president, 'Président') }}
-                {{ form_widget(form.president, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.president) }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_label(form.examinateur, 'Examinateur') }}
-                {{ form_widget(form.examinateur, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.examinateur) }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_label(form.encadreur, 'Encadreur') }}
-                {{ form_widget(form.encadreur, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.encadreur) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="form-actions">
-        <button type="submit" class="btn-primary-custom">
-            <i class="fa fa-save"></i> Enregistrer les modifications
-        </button>
-        <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-times"></i> Annuler
-        </a>
-    </div>
-
-    {{ form_end(form) }}
-</div>
 {% endblock %}

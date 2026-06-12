@@ -1,64 +1,99 @@
 {% extends 'base_admin.html.twig' %}
 
 {% block title %}Salle {{ salle.code }}{% endblock %}
-{% block page_title %}Salles{% endblock %}
+{% block page_title %}Détail de la salle{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" class="theme-btn btn-style-one" style="padding:7px 18px;font-size:13px;margin-right:8px;">
+        <span class="txt"><i class="fa fa-pencil" style="margin-right:4px;"></i>Modifier</span>
+    </a>
+    <a href="{{ path('admin_salle_index') }}" style="color:#71718a;font-size:13px;">
+        <i class="fa fa-arrow-left" style="margin-right:5px;"></i>Liste
+    </a>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Salle {{ salle.code }}</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
-            <a href="{{ path('admin_salle_index') }}">Salles</a> ›
-            Détail
+
+<div class="row clearfix">
+    <div class="col-lg-5 col-md-12">
+        <div class="sidebar-widget" style="margin-bottom:25px;">
+            <div class="widget-content" style="padding:25px 30px;">
+                <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+                    <i class="flaticon-location" style="color:#ff5773;margin-right:8px;"></i>Informations
+                </h6>
+                <table style="width:100%;font-size:13px;line-height:2.5;">
+                    <tr>
+                        <td style="color:#71718a;width:45%;">Code</td>
+                        <td><strong style="font-size:16px;color:#0f0e2d;">{{ salle.code }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="color:#71718a;">Capacité</td>
+                        <td>
+                            <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">
+                                {{ salle.capacite }} places
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:#71718a;">Localisation</td>
+                        <td>{{ salle.localisation }}</td>
+                    </tr>
+                    <tr>
+                        <td style="color:#71718a;">Soutenances</td>
+                        <td>{{ salle.soutenances|length }} au total</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    <div style="display:flex; gap:10px;">
-        <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" class="btn-primary-custom">
-            <i class="fa fa-pencil"></i> Modifier
-        </a>
-        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
-            <i class="fa fa-arrow-left"></i> Retour
-        </a>
+
+    {% if salle.soutenances|length > 0 %}
+    <div class="col-lg-7 col-md-12">
+        <div class="sidebar-widget" style="margin-bottom:25px;">
+            <div class="widget-content" style="padding:25px 30px;">
+                <h6 style="color:#0f0e2d;font-weight:700;margin-bottom:15px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+                    <i class="flaticon-schedule" style="color:#ff5773;margin-right:8px;"></i>Soutenances dans cette salle
+                </h6>
+                <div class="table-responsive">
+                    <table class="table" style="margin:0;font-size:12px;">
+                        <thead>
+                            <tr style="color:#71718a;">
+                                <th>Date</th>
+                                <th>Heure</th>
+                                <th>Étudiant</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in salle.soutenances %}
+                            <tr>
+                                <td>{{ s.date|date('d/m/Y') }}</td>
+                                <td>{{ s.heure|date('H:i') }}</td>
+                                <td>{{ s.etudiant ? s.etudiant.nom ~ ' ' ~ s.etudiant.prenom : '—' }}</td>
+                                <td>
+                                    <a href="{{ path('admin_soutenance_show', {id: s.id}) }}" style="color:#ff5773;">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+    {% endif %}
 </div>
 
-<div class="detail-card">
-    <div class="detail-row">
-        <div class="detail-label">Code</div>
-        <div class="detail-value">
-            <span style="font-family: monospace; font-size: 18px; font-weight: 700; color: #6c5ffc;">
-                {{ salle.code }}
-            </span>
-        </div>
-    </div>
-    <div class="detail-row">
-        <div class="detail-label">Capacité</div>
-        <div class="detail-value">{{ salle.capacite }} places</div>
-    </div>
-    <div class="detail-row">
-        <div class="detail-label">Localisation</div>
-        <div class="detail-value">{{ salle.localisation }}</div>
-    </div>
-    <div class="detail-row">
-        <div class="detail-label">Soutenances</div>
-        <div class="detail-value">
-            {% if salle.soutenances is defined %}
-                {{ salle.soutenances|length }} soutenance(s) dans cette salle
-            {% else %}
-                —
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<div style="margin-top: 20px;">
-    <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}"
-          onsubmit="return confirm('Supprimer cette salle ?');">
+<div style="margin-top:10px;">
+    <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}" style="display:inline;"
+          onsubmit="return confirm('Supprimer la salle {{ salle.code }} ?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
-        <button type="submit" class="btn-danger-custom">
-            <i class="fa fa-trash mr-1"></i> Supprimer cette salle
+        <button type="submit" style="background:none;border:1px solid #e74c3c;color:#e74c3c;padding:7px 18px;border-radius:50px;font-size:13px;cursor:pointer;">
+            <i class="fa fa-trash-o" style="margin-right:5px;"></i>Supprimer cette salle
         </button>
     </form>
 </div>
+
 {% endblock %}

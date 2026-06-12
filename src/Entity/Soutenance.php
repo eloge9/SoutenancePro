@@ -27,13 +27,13 @@ class Soutenance
     #[ORM\ManyToOne(inversedBy: 'soutenances')]
     private ?Salle $salle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'soutenances')]
+    #[ORM\ManyToOne(inversedBy: 'soutenancesPresident')]
     private ?Enseignant $president = null;
 
-    #[ORM\ManyToOne(inversedBy: 'soutenances')]
+    #[ORM\ManyToOne(inversedBy: 'soutenancesExaminateur')]
     private ?Enseignant $examinateur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'soutenances')]
+    #[ORM\ManyToOne(inversedBy: 'soutenancesEncadreur')]
     private ?Enseignant $encadreur = null;
 
     public function getId(): ?int

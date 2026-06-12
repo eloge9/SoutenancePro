@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>{% block title %}SoutenancePro{% endblock %} | SoutenancePro</title>
-    <link rel="shortcut icon" href="{{ asset('logo/logo_court.png') }}" type="image/png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}SoutenancePro{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ asset('akadimia/images/favicon.png') }}" type="image/png">
 
-    <!-- Bootstrap & Template CSS -->
     <link href="{{ asset('akadimia/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ asset('akadimia/css/font-awesome.css') }}" rel="stylesheet">
-    <link href="{{ asset('akadimia/css/flaticon.css') }}" rel="stylesheet">
-    <link href="{{ asset('akadimia/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('akadimia/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('akadimia/css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('akadimia/css/color-themes/theme-one.css') }}" rel="stylesheet">
-    <link href="{{ asset('akadimia/css/dashboard.css') }}" rel="stylesheet">
+    <link id="theme-color-file" href="{{ asset('akadimia/css/color-themes/theme-one.css') }}" rel="stylesheet">
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     {% block stylesheets %}{% endblock %}
@@ -25,7 +20,6 @@
 
 {% block body %}{% endblock %}
 
-<!-- JS -->
 <script src="{{ asset('akadimia/js/jquery.js') }}"></script>
 <script src="{{ asset('akadimia/js/popper.min.js') }}"></script>
 <script src="{{ asset('akadimia/js/bootstrap.min.js') }}"></script>

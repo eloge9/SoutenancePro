@@ -1,129 +1,127 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Tableau de bord Admin{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 {% block page_title %}Tableau de bord{% endblock %}
 
+{% block page_actions %}
+    <a href="{{ path('admin_soutenance_new') }}" class="theme-btn btn-style-one" style="padding:8px 20px;font-size:13px;">
+        <span class="txt"><i class="fa fa-plus" style="margin-right:5px;"></i>Programmer une soutenance</span>
+    </a>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Bienvenue, {{ app.user.email }}</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Tableau de bord
+
+<!-- Stat Cards -->
+<div class="dashboard-section">
+    <div class="row clearfix">
+
+        <div class="dashboard-block col-lg-3 col-md-6 col-sm-12">
+            <a href="{{ path('admin_etudiant_index') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-student"></span></div>
+                        <div class="courses">Étudiants<span>{{ nbEtudiants }}</span></div>
+                    </div>
+                </div>
+            </a>
         </div>
+
+        <div class="dashboard-block col-lg-3 col-md-6 col-sm-12">
+            <a href="{{ path('admin_enseignant_index') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-instructor"></span></div>
+                        <div class="courses">Enseignants<span>{{ nbEnseignants }}</span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="dashboard-block col-lg-3 col-md-6 col-sm-12">
+            <a href="{{ path('admin_salle_index') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-location"></span></div>
+                        <div class="courses">Salles<span>{{ nbSalles }}</span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="dashboard-block col-lg-3 col-md-6 col-sm-12">
+            <a href="{{ path('admin_soutenance_index') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-schedule"></span></div>
+                        <div class="courses">Soutenances<span>{{ nbSoutenances }}</span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
     </div>
 </div>
 
-<!-- Statistiques -->
-<div class="stat-cards">
-    <div class="stat-card">
-        <div class="stat-icon purple">
-            <span class="flaticon-student"></span>
+<!-- Recent Soutenances -->
+<div class="sidebar-widget" style="margin-top:10px;">
+    <div class="widget-content" style="padding:25px 30px;">
+        <div class="clearfix" style="margin-bottom:20px;">
+            <div class="pull-left">
+                <h6 style="color:#0f0e2d;font-weight:700;margin:0;">Soutenances récentes</h6>
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('admin_soutenance_index') }}" class="see-all">Voir toutes</a>
+            </div>
         </div>
-        <div class="stat-info">
-            <h3>{{ nbEtudiants }}</h3>
-            <p>Étudiants</p>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon blue">
-            <span class="flaticon-instructor"></span>
-        </div>
-        <div class="stat-info">
-            <h3>{{ nbEnseignants }}</h3>
-            <p>Enseignants</p>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon green">
-            <span class="flaticon-location"></span>
-        </div>
-        <div class="stat-info">
-            <h3>{{ nbSalles }}</h3>
-            <p>Salles</p>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon orange">
-            <span class="flaticon-schedule"></span>
-        </div>
-        <div class="stat-info">
-            <h3>{{ nbSoutenances }}</h3>
-            <p>Soutenances</p>
-        </div>
-    </div>
-</div>
-
-<!-- Accès rapides -->
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="fa fa-bolt mr-2"></i> Accès rapides</h5>
-    </div>
-    <div style="padding: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="{{ path('admin_etudiant_new') }}" class="btn-primary-custom">
-            <i class="fa fa-plus"></i> Nouvel étudiant
-        </a>
-        <a href="{{ path('admin_enseignant_new') }}" class="btn-primary-custom" style="background: #2cb0ff;">
-            <i class="fa fa-plus"></i> Nouvel enseignant
-        </a>
-        <a href="{{ path('admin_salle_new') }}" class="btn-primary-custom" style="background: #2ed573;">
-            <i class="fa fa-plus"></i> Nouvelle salle
-        </a>
-        <a href="{{ path('admin_soutenance_new') }}" class="btn-primary-custom" style="background: #ffa502;">
-            <i class="fa fa-plus"></i> Nouvelle soutenance
-        </a>
-    </div>
-</div>
-
-<!-- Dernières soutenances -->
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="fa fa-calendar mr-2"></i> Dernières soutenances programmées</h5>
-        <a href="{{ path('admin_soutenance_index') }}" class="btn-action btn-view">Voir tout</a>
-    </div>
-    <div class="table-card-body">
-        {% if derniersSoutenances is defined and derniersSoutenances|length > 0 %}
-            <table class="table-soutenance">
+        {% if derniersSoutenances|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin:0;font-size:13px;">
                 <thead>
-                    <tr>
-                        <th>Étudiant</th>
-                        <th>Filière</th>
+                    <tr style="background:#f8f9fd;color:#71718a;">
                         <th>Date</th>
                         <th>Heure</th>
+                        <th>Étudiant</th>
+                        <th>Thème</th>
                         <th>Salle</th>
-                        <th>Président</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for soutenance in derniersSoutenances %}
-                        <tr>
-                            <td><strong>{{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</strong></td>
-                            <td>{{ soutenance.etudiant.filiere }}</td>
-                            <td>{{ soutenance.date|date('d/m/Y') }}</td>
-                            <td>{{ soutenance.heure|date('H:i') }}</td>
-                            <td>{{ soutenance.salle.code }}</td>
-                            <td>{{ soutenance.president.nom }} {{ soutenance.president.prenom }}</td>
-                            <td>
-                                <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" class="btn-action btn-view">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a href="{{ path('admin_soutenance_edit', {id: soutenance.id}) }}" class="btn-action btn-edit">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{ soutenance.date|date('d/m/Y') }}</td>
+                        <td>{{ soutenance.heure|date('H:i') }}</td>
+                        <td>
+                            {% if soutenance.etudiant %}
+                                <strong>{{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</strong>
+                            {% else %}&mdash;{% endif %}
+                        </td>
+                        <td>
+                            {% if soutenance.etudiant %}
+                                {{ soutenance.etudiant.themeMemoire|slice(0,45) }}{% if soutenance.etudiant.themeMemoire|length > 45 %}…{% endif %}
+                            {% else %}&mdash;{% endif %}
+                        </td>
+                        <td>{{ soutenance.salle ? soutenance.salle.code : '—' }}</td>
+                        <td>
+                            <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" title="Voir" style="color:#ff5773;margin-right:8px;">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ path('admin_soutenance_edit', {id: soutenance.id}) }}" title="Modifier" style="color:#71718a;">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         {% else %}
-            <div style="padding: 30px; text-align: center; color: #aaa;">
-                <i class="fa fa-calendar-o" style="font-size:32px; margin-bottom:10px; display:block;"></i>
-                Aucune soutenance programmée pour le moment.
-            </div>
+        <div style="text-align:center;padding:30px;color:#71718a;">
+            <span class="flaticon-schedule" style="font-size:40px;color:#e0e0e0;display:block;margin-bottom:10px;"></span>
+            <p>Aucune soutenance programmée.</p>
+        </div>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}

@@ -16,28 +16,26 @@ class SalleRepository extends ServiceEntityRepository
         parent::__construct($registry, Salle::class);
     }
 
-//    /**
-//     * @return Salle[] Returns an array of Salle objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /** @return Salle[] */
+    public function findAllOrderedByCode(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->orderBy('s.code', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Salle
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByCodeExcept(string $code, ?int $excludeId = null): ?Salle
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.code = :code')
+            ->setParameter('code', $code);
+
+        if ($excludeId !== null) {
+            $qb->andWhere('s.id != :excludeId')
+               ->setParameter('excludeId', $excludeId);
+        }
+
+        return $qb->setMaxResults(1)->getQuery()->getOneOrNullResult();
+    }
 }

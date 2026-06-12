@@ -1,122 +1,164 @@
 {% extends 'base.html.twig' %}
 
-{% block body_class %}dashboard-body{% endblock %}
-
 {% block body %}
-<div class="dashboard-wrapper">
+<div class="page-wrapper">
 
-    <!-- ===== SIDEBAR ENSEIGNANT ===== -->
-    <aside class="dashboard-sidebar" id="enseignantSidebar">
-        <div class="sidebar-logo">
-            <a href="{{ path('enseignant_dashboard') }}">
-                <img src="{{ asset('logo/logo_horizontal.png') }}" alt="SoutenancePro">
-            </a>
-            <div class="app-title">Espace Enseignant</div>
-        </div>
+    <!-- Preloader -->
+    <div class="preloader"></div>
 
-        <nav class="sidebar-nav">
-            <div class="sidebar-section-title">Menu principal</div>
-            <ul>
-                <li>
-                    <a href="{{ path('enseignant_dashboard') }}"
-                       class="{{ app.request.attributes.get('_route') == 'enseignant_dashboard' ? 'active' : '' }}">
-                        <span class="nav-icon flaticon-home"></span>
-                        <span class="nav-text">Tableau de bord</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('enseignant_soutenances') }}"
-                       class="{{ app.request.attributes.get('_route') == 'enseignant_soutenances' ? 'active' : '' }}">
-                        <span class="nav-icon flaticon-book"></span>
-                        <span class="nav-text">Mes soutenances</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('enseignant_jurys') }}"
-                       class="{{ app.request.attributes.get('_route') == 'enseignant_jurys' ? 'active' : '' }}">
-                        <span class="nav-icon flaticon-test"></span>
-                        <span class="nav-text">Mes jurys</span>
-                    </a>
-                </li>
-            </ul>
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-upper">
+            <div class="outer-container">
+                <div class="clearfix">
 
-            <div class="sidebar-section-title" style="margin-top: 20px;">Compte</div>
-            <ul>
-                <li class="nav-logout">
-                    <a href="{{ path('app_logout') }}">
-                        <span class="nav-icon fa fa-sign-out"></span>
-                        <span class="nav-text">Déconnexion</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-
-    <!-- ===== MAIN AREA ===== -->
-    <div class="dashboard-main">
-
-        <!-- Top Header -->
-        <header class="dashboard-header">
-            <div class="d-flex align-items-center gap-3">
-                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Menu">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <h1 class="page-title mb-0">{% block page_title %}Espace Enseignant{% endblock %}</h1>
-            </div>
-
-            <div class="header-right">
-                <div class="user-dropdown dropdown">
-                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                        <div class="user-avatar">
-                            {{ app.user ? app.user.email|first|upper : 'E' }}
+                    <div class="header-left clearfix">
+                        <div class="left-sidebar-btn hidden-bar-opener">
+                            <span class="icon flaticon-menu-2"></span>
                         </div>
-                        <span>
-                            {% if app.user and app.user.enseignant %}
-                                {{ app.user.enseignant.prenom }} {{ app.user.enseignant.nom }}
-                            {% else %}
-                                {{ app.user ? app.user.email : 'Enseignant' }}
-                            {% endif %}
-                        </span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                            <i class="fa fa-sign-out mr-2"></i> Déconnexion
-                        </a>
+                        <div class="pull-left logo-box">
+                            <div class="logo">
+                                <a href="{{ path('enseignant_dashboard') }}">
+                                    <img src="{{ asset('logo/logo_horizontal.png') }}" alt="SoutenancePro" style="height:42px; margin-top:14px;">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="header-right clearfix">
+                        <div class="options-box clearfix">
+                            <div class="profile-box dropdown" id="enseignantProfileBox">
+                                <div class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="profile-image" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#ff5773;color:#fff;font-weight:700;font-size:15px;vertical-align:middle;">
+                                        {{ app.user ? app.user.email|first|upper : 'E' }}
+                                    </span>
+                                    <i class="arrow flaticon-down-arrow" style="margin-left:6px;"></i>
+                                </div>
+                                <div class="profile-content">
+                                    <div class="setting" style="padding:10px 15px;font-weight:600;color:#0f0e2d;font-size:13px;border-bottom:1px solid #f0f0f0;">
+                                        {% if app.user and app.user.enseignant %}
+                                            {{ app.user.enseignant.prenom }} {{ app.user.enseignant.nom }}
+                                        {% else %}
+                                            {{ app.user ? app.user.email : 'Enseignant' }}
+                                        {% endif %}
+                                    </div>
+                                    <ul class="pages" style="margin:0;padding:5px 0;">
+                                        <li><a href="{{ path('app_logout') }}"><i class="fa fa-sign-out" style="margin-right:6px;"></i>Déconnexion</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Main Header -->
+
+    <!-- Page Content -->
+    <div class="sidebar-page-container">
+        <div class="auto-container">
+
+            <!-- Page Title -->
+            <div class="sec-title" style="margin-bottom:25px;">
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <h4 style="color:#0f0e2d;font-weight:700;">{% block page_title %}Espace Enseignant{% endblock %}</h4>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <!-- Flash Messages -->
-        <div class="dashboard-content" style="padding-bottom: 0; padding-top: 15px;">
+            <!-- Flash Messages -->
             {% for type, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="flash-{{ type == 'success' ? 'success' : 'error' }}">
-                        <i class="fa fa-{{ type == 'success' ? 'check-circle' : 'exclamation-circle' }} mr-2"></i>
+                    <div class="alert alert-{{ type == 'success' ? 'success' : 'danger' }} alert-dismissible fade show" role="alert" style="border-radius:5px;margin-bottom:20px;">
+                        <i class="fa fa-{{ type == 'success' ? 'check-circle' : 'exclamation-circle' }}" style="margin-right:8px;"></i>
                         {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 {% endfor %}
             {% endfor %}
-        </div>
 
-        <!-- Page Content -->
-        <main class="dashboard-content">
+            <!-- Content Block -->
             {% block content %}{% endblock %}
-        </main>
 
-        <!-- Footer -->
-        <footer style="text-align:center; padding: 15px; font-size: 12px; color: #aaa; border-top: 1px solid #f0f0f8; background: #fff;">
-            &copy; {{ "now"|date("Y") }} SoutenancePro &mdash; Gestion des soutenances
-        </footer>
+        </div>
     </div>
-</div>
+    <!-- End Page Content -->
 
-{% block javascripts %}
-{{ parent() }}
-<script>
-function toggleSidebar() {
-    document.getElementById('enseignantSidebar').classList.toggle('open');
-}
-</script>
-{% endblock %}
+</div>
+<!-- End page-wrapper -->
+
+<!-- Sidebar Nav (sidenav-list) -->
+<div class="sidenav-list">
+    <ul class="navbar">
+        <li>
+            <a href="{{ path('enseignant_dashboard') }}" class="{{ app.request.attributes.get('_route') == 'enseignant_dashboard' ? 'active' : '' }}">
+                <i class="icon flaticon-home"></i>
+                <span><i class="flaticon-home"></i> Tableau de bord</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('enseignant_soutenances') }}" class="{{ app.request.attributes.get('_route') == 'enseignant_soutenances' ? 'active' : '' }}">
+                <i class="icon flaticon-schedule"></i>
+                <span><i class="flaticon-schedule"></i> Mes soutenances</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('enseignant_jurys') }}" class="{{ app.request.attributes.get('_route') == 'enseignant_jurys' ? 'active' : '' }}">
+                <i class="icon flaticon-file"></i>
+                <span><i class="flaticon-file"></i> Mes jurys</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('app_logout') }}">
+                <i class="icon fa fa-sign-out"></i>
+                <span><i class="fa fa-sign-out"></i> Déconnexion</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- End Sidebar Nav -->
+
+<!-- Hidden Navigation Bar -->
+<section class="hidden-bar left-align">
+    <div class="color-layer"></div>
+    <div class="hidden-bar-closer">
+        <span class="flaticon-multiply"></span>
+    </div>
+    <div class="hidden-bar-wrapper">
+        <ul class="pages-list">
+            <li class="{{ app.request.attributes.get('_route') == 'enseignant_dashboard' ? 'active' : '' }}">
+                <a href="{{ path('enseignant_dashboard') }}">
+                    <span class="icon flaticon-home"></span>Tableau de bord
+                </a>
+            </li>
+            <li class="{{ app.request.attributes.get('_route') == 'enseignant_soutenances' ? 'active' : '' }}">
+                <a href="{{ path('enseignant_soutenances') }}">
+                    <span class="icon flaticon-schedule"></span>Mes soutenances
+                </a>
+            </li>
+            <li class="{{ app.request.attributes.get('_route') == 'enseignant_jurys' ? 'active' : '' }}">
+                <a href="{{ path('enseignant_jurys') }}">
+                    <span class="icon flaticon-file"></span>Mes jurys
+                </a>
+            </li>
+        </ul>
+        <div class="heading">Compte</div>
+        <ul class="pages-list">
+            <li>
+                <a href="{{ path('app_logout') }}">
+                    <span class="icon fa fa-sign-out"></span>Déconnexion
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="copyright-text">&copy; {{ "now"|date("Y") }} SoutenancePro</div>
+</section>
+<!-- End Hidden Navigation Bar -->
+
+{% block javascripts %}{{ parent() }}{% endblock %}
 {% endblock %}

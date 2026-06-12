@@ -1,77 +1,75 @@
 {% extends 'base_admin.html.twig' %}
 
-{% block title %}Liste des salles{% endblock %}
-{% block page_title %}Salles{% endblock %}
+{% block title %}Salles{% endblock %}
+{% block page_title %}Gestion des salles{% endblock %}
+
+{% block page_actions %}
+    <a href="{{ path('admin_salle_new') }}" class="theme-btn btn-style-one" style="padding:8px 20px;font-size:13px;">
+        <span class="txt"><i class="fa fa-plus" style="margin-right:5px;"></i>Ajouter une salle</span>
+    </a>
+{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Liste des salles</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Salles
-        </div>
-    </div>
-    <a href="{{ path('admin_salle_new') }}" class="btn-primary-custom">
-        <i class="fa fa-plus"></i> Ajouter une salle
-    </a>
-</div>
 
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="flaticon-location mr-2"></i> {{ salles|length }} salle(s)</h5>
-    </div>
-    <div class="table-card-body">
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:0;">
         {% if salles|length > 0 %}
-            <table class="table-soutenance">
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin:0;font-size:13px;">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Code</th>
+                    <tr style="background:#f8f9fd;color:#71718a;font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
+                        <th style="padding:15px 20px;">Code</th>
                         <th>Capacité</th>
                         <th>Localisation</th>
-                        <th>Actions</th>
+                        <th>Soutenances</th>
+                        <th style="text-align:right;padding-right:20px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for salle in salles %}
-                        <tr>
-                            <td>{{ salle.id }}</td>
-                            <td>
-                                <strong style="font-family: monospace; font-size: 15px; color: #6c5ffc;">
-                                    {{ salle.code }}
-                                </strong>
-                            </td>
-                            <td>{{ salle.capacite }} places</td>
-                            <td>{{ salle.localisation }}</td>
-                            <td>
-                                <a href="{{ path('admin_salle_show', {id: salle.id}) }}" class="btn-action btn-view" title="Voir">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" class="btn-action btn-edit" title="Modifier">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}"
-                                      style="display:inline;"
-                                      onsubmit="return confirm('Supprimer cette salle ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
-                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td style="padding:14px 20px;">
+                            <strong style="color:#0f0e2d;">{{ salle.code }}</strong>
+                        </td>
+                        <td>
+                            <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;">
+                                {{ salle.capacite }} places
+                            </span>
+                        </td>
+                        <td style="color:#71718a;">{{ salle.localisation }}</td>
+                        <td>
+                            <span style="font-size:13px;color:#555;">{{ salle.soutenances|length }} soutenance(s)</span>
+                        </td>
+                        <td style="text-align:right;padding-right:20px;">
+                            <a href="{{ path('admin_salle_show', {id: salle.id}) }}" title="Voir" style="color:#71718a;margin-right:8px;">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" title="Modifier" style="color:#ff9066;margin-right:8px;">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}" style="display:inline;"
+                                  onsubmit="return confirm('Supprimer la salle {{ salle.code }} ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
+                                <button type="submit" title="Supprimer" style="background:none;border:none;cursor:pointer;color:#e74c3c;padding:0;">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         {% else %}
-            <div style="padding: 40px; text-align: center; color: #aaa;">
-                <i class="flaticon-location" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
-                <p>Aucune salle enregistrée.</p>
-                <a href="{{ path('admin_salle_new') }}" class="btn-primary-custom">
-                    <i class="fa fa-plus"></i> Ajouter la première salle
-                </a>
-            </div>
+        <div style="text-align:center;padding:50px;color:#71718a;">
+            <span class="flaticon-location" style="font-size:48px;color:#e0e0e0;display:block;margin-bottom:15px;"></span>
+            <p>Aucune salle enregistrée.</p>
+            <a href="{{ path('admin_salle_new') }}" class="theme-btn btn-style-one" style="margin-top:10px;display:inline-block;">
+                <span class="txt">Ajouter la première salle</span>
+            </a>
+        </div>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}

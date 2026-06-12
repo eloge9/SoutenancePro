@@ -1,109 +1,102 @@
 {% extends 'base_enseignant.html.twig' %}
 
-{% block title %}Mon tableau de bord{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 {% block page_title %}Tableau de bord{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>
-            Bonjour,
-            {% if app.user and app.user.enseignant %}
-                {{ app.user.enseignant.prenom }} {{ app.user.enseignant.nom }}
-            {% else %}
-                {{ app.user.email }}
-            {% endif %}
-        </h2>
-        <div class="breadcrumb-custom">Espace Enseignant</div>
+
+<!-- Stat Cards -->
+<div class="dashboard-section">
+    <div class="row clearfix">
+
+        <div class="dashboard-block col-lg-4 col-md-6 col-sm-12">
+            <a href="{{ path('enseignant_soutenances') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-schedule"></span></div>
+                        <div class="courses">Mes soutenances<span>{{ nbSoutenances }}</span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="dashboard-block col-lg-4 col-md-6 col-sm-12">
+            <a href="{{ path('enseignant_jurys') }}" style="text-decoration:none;color:inherit;">
+                <div class="inner-box">
+                    <div class="content">
+                        <div class="icon-box"><span class="flaticon-file"></span></div>
+                        <div class="courses">Participations jury<span>{{ nbJurys }}</span></div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="dashboard-block col-lg-4 col-md-6 col-sm-12">
+            <div class="inner-box">
+                <div class="content">
+                    <div class="icon-box"><span class="flaticon-student"></span></div>
+                    <div class="courses">Étudiants encadrés<span>{{ nbEtudiants }}</span></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<!-- Statistiques -->
-<div class="stat-cards">
-    <div class="stat-card">
-        <div class="stat-icon purple">
-            <span class="fa fa-calendar"></span>
+<!-- Recent Soutenances -->
+{% if soutenances|length > 0 %}
+<div class="sidebar-widget" style="margin-top:10px;">
+    <div class="widget-content" style="padding:25px 30px;">
+        <div class="clearfix" style="margin-bottom:20px;">
+            <div class="pull-left">
+                <h6 style="color:#0f0e2d;font-weight:700;margin:0;">Mes prochaines soutenances</h6>
+            </div>
+            <div class="pull-right">
+                <a href="{{ path('enseignant_soutenances') }}" class="see-all">Voir tout</a>
+            </div>
         </div>
-        <div class="stat-info">
-            <h3>{{ nbSoutenances }}</h3>
-            <p>Mes soutenances</p>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon blue">
-            <span class="fa fa-gavel"></span>
-        </div>
-        <div class="stat-info">
-            <h3>{{ nbJurys }}</h3>
-            <p>Participations jury</p>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon green">
-            <span class="fa fa-users"></span>
-        </div>
-        <div class="stat-info">
-            <h3>{{ nbEtudiants }}</h3>
-            <p>Étudiants concernés</p>
-        </div>
-    </div>
-</div>
-
-<!-- Prochaines soutenances -->
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="fa fa-clock-o mr-2"></i> Prochaines soutenances</h5>
-        <a href="{{ path('enseignant_soutenances') }}" class="btn-action btn-view">Voir tout</a>
-    </div>
-    <div class="table-card-body">
-        {% if soutenances is defined and soutenances|length > 0 %}
-            <table class="table-soutenance">
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin:0;font-size:13px;">
                 <thead>
-                    <tr>
+                    <tr style="background:#f8f9fd;color:#71718a;">
+                        <th>Date</th>
+                        <th>Heure</th>
                         <th>Étudiant</th>
-                        <th>Thème</th>
-                        <th>Date & Heure</th>
                         <th>Salle</th>
                         <th>Mon rôle</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in soutenances %}
-                        <tr>
-                            <td>
-                                <strong>{{ item.soutenance.etudiant.nom }} {{ item.soutenance.etudiant.prenom }}</strong>
-                                <div style="font-size:12px; color:#888;">{{ item.soutenance.etudiant.filiere }}</div>
-                            </td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                title="{{ item.soutenance.etudiant.themeMemoire }}">
-                                {{ item.soutenance.etudiant.themeMemoire }}
-                            </td>
-                            <td>
-                                <div style="font-weight:600;">{{ item.soutenance.date|date('d/m/Y') }}</div>
-                                <div style="color:#888; font-size:12px;">{{ item.soutenance.heure|date('H:i') }}</div>
-                            </td>
-                            <td>
-                                <span style="font-family:monospace; color:#6c5ffc; font-weight:600;">
-                                    {{ item.soutenance.salle.code }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge-role badge-{{ item.role|lower }}">
-                                    {{ item.role }}
-                                </span>
-                            </td>
-                        </tr>
+                    {% for item in soutenances|slice(0, 5) %}
+                    {% set s = item.soutenance %}
+                    <tr>
+                        <td><strong>{{ s.date|date('d/m/Y') }}</strong></td>
+                        <td>{{ s.heure|date('H:i') }}</td>
+                        <td>{{ s.etudiant ? s.etudiant.nom ~ ' ' ~ s.etudiant.prenom : '—' }}</td>
+                        <td>{{ s.salle ? s.salle.code : '—' }}</td>
+                        <td>
+                            {% if item.role == 'Président' %}
+                                <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">Président</span>
+                            {% elseif item.role == 'Examinateur' %}
+                                <span style="background:#fff5f0;color:#ff9066;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">Examinateur</span>
+                            {% else %}
+                                <span style="background:#fffbf0;color:#d4a017;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">Encadreur</span>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        {% else %}
-            <div style="padding: 30px; text-align: center; color: #aaa;">
-                <i class="fa fa-calendar-o" style="font-size:32px; margin-bottom:10px; display:block;"></i>
-                Aucune soutenance à venir pour le moment.
-            </div>
-        {% endif %}
+        </div>
     </div>
 </div>
+{% else %}
+<div class="sidebar-widget" style="margin-top:10px;">
+    <div class="widget-content" style="padding:40px;text-align:center;color:#71718a;">
+        <span class="flaticon-schedule" style="font-size:40px;color:#e0e0e0;display:block;margin-bottom:10px;"></span>
+        <p>Vous n'avez pas encore de soutenance programmée.</p>
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}

@@ -126,6 +126,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
+    public function getEnseignant(): ?Enseignant
+    {
+        return $this->enseignants->first() ?: null;
+    }
+
     /**
      * @return Collection<int, Enseignant>
      */

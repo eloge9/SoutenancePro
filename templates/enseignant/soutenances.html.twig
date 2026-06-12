@@ -4,75 +4,66 @@
 {% block page_title %}Mes soutenances{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div>
-        <h2>Mes soutenances</h2>
-        <div class="breadcrumb-custom">
-            <a href="{{ path('enseignant_dashboard') }}">Accueil</a> › Mes soutenances
-        </div>
-    </div>
-</div>
 
-<div class="table-card">
-    <div class="table-card-header">
-        <h5><i class="flaticon-book mr-2"></i> Toutes mes soutenances</h5>
-    </div>
-    <div class="table-card-body">
-        {% if soutenances is defined and soutenances|length > 0 %}
-            <table class="table-soutenance">
+<div class="sidebar-widget">
+    <div class="widget-content" style="padding:0;">
+        {% if soutenances|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-hover" style="margin:0;font-size:13px;">
                 <thead>
-                    <tr>
+                    <tr style="background:#f8f9fd;color:#71718a;font-size:12px;text-transform:uppercase;letter-spacing:.5px;">
+                        <th style="padding:15px 20px;">Date &amp; Heure</th>
                         <th>Étudiant</th>
-                        <th>Filière</th>
-                        <th>Thème du mémoire</th>
-                        <th>Date</th>
-                        <th>Heure</th>
+                        <th>Thème</th>
                         <th>Salle</th>
                         <th>Mon rôle</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in soutenances %}
-                        <tr>
-                            <td>
-                                <strong>{{ item.soutenance.etudiant.nom }} {{ item.soutenance.etudiant.prenom }}</strong>
-                                <div style="font-size:12px; color:#888;">
-                                    <a href="mailto:{{ item.soutenance.etudiant.email }}">{{ item.soutenance.etudiant.email }}</a>
-                                </div>
-                            </td>
-                            <td>{{ item.soutenance.etudiant.filiere }}</td>
-                            <td style="max-width: 220px;">
-                                <span title="{{ item.soutenance.etudiant.themeMemoire }}">
-                                    {{ item.soutenance.etudiant.themeMemoire|length > 50 ? item.soutenance.etudiant.themeMemoire[:50] ~ '...' : item.soutenance.etudiant.themeMemoire }}
-                                </span>
-                            </td>
-                            <td>{{ item.soutenance.date|date('d/m/Y') }}</td>
-                            <td>{{ item.soutenance.heure|date('H:i') }}</td>
-                            <td>
-                                <span style="font-family:monospace; color:#6c5ffc; font-weight:600;">
-                                    {{ item.soutenance.salle.code }}
-                                </span>
-                                <div style="font-size:11px; color:#888;">{{ item.soutenance.salle.localisation }}</div>
-                            </td>
-                            <td>
-                                {% if item.role == 'Président' %}
-                                    <span class="badge-role badge-president">Président</span>
-                                {% elseif item.role == 'Examinateur' %}
-                                    <span class="badge-role badge-examinateur">Examinateur</span>
-                                {% else %}
-                                    <span class="badge-role badge-encadreur">Encadreur</span>
-                                {% endif %}
-                            </td>
-                        </tr>
+                    {% set s = item.soutenance %}
+                    <tr>
+                        <td style="padding:14px 20px;white-space:nowrap;">
+                            <strong>{{ s.date|date('d/m/Y') }}</strong><br>
+                            <span style="color:#71718a;font-size:12px;">{{ s.heure|date('H:i') }}</span>
+                        </td>
+                        <td>
+                            {% if s.etudiant %}
+                                <strong>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</strong><br>
+                                <span style="font-size:12px;color:#71718a;">{{ s.etudiant.filiere }}</span>
+                            {% else %}&mdash;{% endif %}
+                        </td>
+                        <td style="font-size:12px;color:#777;max-width:200px;">
+                            {% if s.etudiant %}
+                                {{ s.etudiant.themeMemoire|slice(0,60) }}{% if s.etudiant.themeMemoire|length > 60 %}…{% endif %}
+                            {% else %}&mdash;{% endif %}
+                        </td>
+                        <td>
+                            <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;">
+                                {{ s.salle ? s.salle.code : '—' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if item.role == 'Président' %}
+                                <span style="background:#fff0f3;color:#ff5773;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600;">Président</span>
+                            {% elseif item.role == 'Examinateur' %}
+                                <span style="background:#fff5f0;color:#ff9066;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600;">Examinateur</span>
+                            {% else %}
+                                <span style="background:#fffbf0;color:#d4a017;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600;">Encadreur</span>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         {% else %}
-            <div style="padding: 40px; text-align: center; color: #aaa;">
-                <i class="flaticon-book" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
-                <p>Vous n'avez aucune soutenance assignée pour le moment.</p>
-            </div>
+        <div style="text-align:center;padding:50px;color:#71718a;">
+            <span class="flaticon-schedule" style="font-size:48px;color:#e0e0e0;display:block;margin-bottom:15px;"></span>
+            <p>Vous n'avez pas encore de soutenance programmée.</p>
+        </div>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}
