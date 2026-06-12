@@ -1,24 +1,39 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>{% block title %}SoutenancePro{% endblock %} | SoutenancePro</title>
+    <link rel="shortcut icon" href="{{ asset('logo/logo_court.png') }}" type="image/png">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+    <!-- Bootstrap & Template CSS -->
+    <link href="{{ asset('akadimia/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/flaticon.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/color-themes/theme-one.css') }}" rel="stylesheet">
+    <link href="{{ asset('akadimia/css/dashboard.css') }}" rel="stylesheet">
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+{% block body %}{% endblock %}
+
+<!-- JS -->
+<script src="{{ asset('akadimia/js/jquery.js') }}"></script>
+<script src="{{ asset('akadimia/js/popper.min.js') }}"></script>
+<script src="{{ asset('akadimia/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('akadimia/js/appear.js') }}"></script>
+<script src="{{ asset('akadimia/js/owl.js') }}"></script>
+<script src="{{ asset('akadimia/js/wow.js') }}"></script>
+<script src="{{ asset('akadimia/js/script.js') }}"></script>
+
+{% block javascripts %}{% endblock %}
+</body>
 </html>

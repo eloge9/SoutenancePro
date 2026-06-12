@@ -1,0 +1,64 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Salle {{ salle.code }}{% endblock %}
+{% block page_title %}Salles{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Salle {{ salle.code }}</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_salle_index') }}">Salles</a> ›
+            Détail
+        </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" class="btn-primary-custom">
+            <i class="fa fa-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="detail-card">
+    <div class="detail-row">
+        <div class="detail-label">Code</div>
+        <div class="detail-value">
+            <span style="font-family: monospace; font-size: 18px; font-weight: 700; color: #6c5ffc;">
+                {{ salle.code }}
+            </span>
+        </div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Capacité</div>
+        <div class="detail-value">{{ salle.capacite }} places</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Localisation</div>
+        <div class="detail-value">{{ salle.localisation }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Soutenances</div>
+        <div class="detail-value">
+            {% if salle.soutenances is defined %}
+                {{ salle.soutenances|length }} soutenance(s) dans cette salle
+            {% else %}
+                —
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}"
+          onsubmit="return confirm('Supprimer cette salle ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
+        <button type="submit" class="btn-danger-custom">
+            <i class="fa fa-trash mr-1"></i> Supprimer cette salle
+        </button>
+    </form>
+</div>
+{% endblock %}

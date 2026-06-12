@@ -1,0 +1,83 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Liste des enseignants{% endblock %}
+{% block page_title %}Enseignants{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Liste des enseignants</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Enseignants
+        </div>
+    </div>
+    <a href="{{ path('admin_enseignant_new') }}" class="btn-primary-custom">
+        <i class="fa fa-plus"></i> Ajouter un enseignant
+    </a>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h5><i class="flaticon-instructor mr-2"></i> {{ enseignants|length }} enseignant(s)</h5>
+    </div>
+    <div class="table-card-body">
+        {% if enseignants|length > 0 %}
+            <table class="table-soutenance">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom complet</th>
+                        <th>Email</th>
+                        <th>Spécialité</th>
+                        <th>Compte utilisateur</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for enseignant in enseignants %}
+                        <tr>
+                            <td>{{ enseignant.id }}</td>
+                            <td><strong>{{ enseignant.nom }} {{ enseignant.prenom }}</strong></td>
+                            <td>{{ enseignant.email }}</td>
+                            <td>{{ enseignant.specialite }}</td>
+                            <td>
+                                {% if enseignant.compte %}
+                                    <span style="color: #2ed573; font-size: 12px;">
+                                        <i class="fa fa-check-circle"></i> {{ enseignant.compte.email }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #aaa; font-size: 12px;">Aucun compte</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_enseignant_show', {id: enseignant.id}) }}" class="btn-action btn-view" title="Voir">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ path('admin_enseignant_edit', {id: enseignant.id}) }}" class="btn-action btn-edit" title="Modifier">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('admin_enseignant_delete', {id: enseignant.id}) }}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Supprimer cet enseignant ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ enseignant.id) }}">
+                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-instructor" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Aucun enseignant enregistré.</p>
+                <a href="{{ path('admin_enseignant_new') }}" class="btn-primary-custom">
+                    <i class="fa fa-plus"></i> Ajouter le premier enseignant
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}{{ enseignant.nom }} {{ enseignant.prenom }}{% endblock %}
+{% block page_title %}Enseignants{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>{{ enseignant.nom }} {{ enseignant.prenom }}</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_enseignant_index') }}">Enseignants</a> ›
+            Détail
+        </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <a href="{{ path('admin_enseignant_edit', {id: enseignant.id}) }}" class="btn-primary-custom">
+            <i class="fa fa-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('admin_enseignant_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="detail-card">
+    <div class="detail-row">
+        <div class="detail-label">Nom complet</div>
+        <div class="detail-value">{{ enseignant.nom }} {{ enseignant.prenom }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Adresse e-mail</div>
+        <div class="detail-value"><a href="mailto:{{ enseignant.email }}">{{ enseignant.email }}</a></div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Spécialité</div>
+        <div class="detail-value">{{ enseignant.specialite }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Compte utilisateur</div>
+        <div class="detail-value">
+            {% if enseignant.compte %}
+                <span style="color: #2ed573;"><i class="fa fa-check-circle"></i></span>
+                {{ enseignant.compte.email }}
+            {% else %}
+                <span style="color:#aaa;">Aucun compte associé</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Soutenances de cet enseignant -->
+<div class="table-card" style="margin-top: 25px;">
+    <div class="table-card-header">
+        <h5><i class="fa fa-calendar mr-2"></i> Soutenances avec cet enseignant</h5>
+    </div>
+    <div class="table-card-body">
+        {% set hasSoutenances = false %}
+        {% if enseignant.soutenancesPresident is defined and enseignant.soutenancesPresident|length > 0 %}
+            {% set hasSoutenances = true %}
+            <div style="padding: 12px 20px; background:#f8f9fe; font-weight:600; font-size:13px; color: #6c5ffc;">
+                Président du jury
+            </div>
+            <table class="table-soutenance">
+                <thead>
+                    <tr><th>Étudiant</th><th>Date</th><th>Salle</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in enseignant.soutenancesPresident %}
+                        <tr>
+                            <td>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</td>
+                            <td>{{ s.date|date('d/m/Y') }} {{ s.heure|date('H:i') }}</td>
+                            <td>{{ s.salle.code }}</td>
+                            <td><a href="{{ path('admin_soutenance_show', {id: s.id}) }}" class="btn-action btn-view"><i class="fa fa-eye"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if enseignant.soutenancesExaminateur is defined and enseignant.soutenancesExaminateur|length > 0 %}
+            {% set hasSoutenances = true %}
+            <div style="padding: 12px 20px; background:#f8f9fe; font-weight:600; font-size:13px; color: #2cb0ff;">
+                Examinateur
+            </div>
+            <table class="table-soutenance">
+                <thead>
+                    <tr><th>Étudiant</th><th>Date</th><th>Salle</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in enseignant.soutenancesExaminateur %}
+                        <tr>
+                            <td>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</td>
+                            <td>{{ s.date|date('d/m/Y') }} {{ s.heure|date('H:i') }}</td>
+                            <td>{{ s.salle.code }}</td>
+                            <td><a href="{{ path('admin_soutenance_show', {id: s.id}) }}" class="btn-action btn-view"><i class="fa fa-eye"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if enseignant.soutenancesEncadreur is defined and enseignant.soutenancesEncadreur|length > 0 %}
+            {% set hasSoutenances = true %}
+            <div style="padding: 12px 20px; background:#f8f9fe; font-weight:600; font-size:13px; color: #2ed573;">
+                Encadreur
+            </div>
+            <table class="table-soutenance">
+                <thead>
+                    <tr><th>Étudiant</th><th>Date</th><th>Salle</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in enseignant.soutenancesEncadreur %}
+                        <tr>
+                            <td>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</td>
+                            <td>{{ s.date|date('d/m/Y') }} {{ s.heure|date('H:i') }}</td>
+                            <td>{{ s.salle.code }}</td>
+                            <td><a href="{{ path('admin_soutenance_show', {id: s.id}) }}" class="btn-action btn-view"><i class="fa fa-eye"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if not hasSoutenances %}
+            <div style="padding: 30px; text-align: center; color: #aaa;">
+                Aucune soutenance associée à cet enseignant.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <form method="post" action="{{ path('admin_enseignant_delete', {id: enseignant.id}) }}"
+          onsubmit="return confirm('Supprimer cet enseignant ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ enseignant.id) }}">
+        <button type="submit" class="btn-danger-custom">
+            <i class="fa fa-trash mr-1"></i> Supprimer cet enseignant
+        </button>
+    </form>
+</div>
+{% endblock %}

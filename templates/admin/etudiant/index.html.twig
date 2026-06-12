@@ -1,0 +1,105 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Liste des étudiants{% endblock %}
+{% block page_title %}Étudiants{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Liste des étudiants</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Étudiants
+        </div>
+    </div>
+    <a href="{{ path('admin_etudiant_new') }}" class="btn-primary-custom">
+        <i class="fa fa-plus"></i> Ajouter un étudiant
+    </a>
+</div>
+
+<!-- Recherche -->
+<form method="get" action="{{ path('admin_etudiant_index') }}" style="margin-bottom: 20px;">
+    <div style="display:flex; gap:10px; max-width: 480px;">
+        <input type="text" name="q" value="{{ search }}" placeholder="Rechercher par nom, prénom ou email…"
+               style="flex:1; padding: 10px 14px; border: 1.5px solid #e0e0f0; border-radius: 8px; font-size:14px;">
+        <button type="submit" class="btn-primary-custom" style="padding: 10px 18px;">
+            <i class="fa fa-search"></i>
+        </button>
+        {% if search %}
+            <a href="{{ path('admin_etudiant_index') }}" class="btn-secondary-custom">
+                <i class="fa fa-times"></i>
+            </a>
+        {% endif %}
+    </div>
+</form>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h5><i class="flaticon-student mr-2"></i> {{ etudiants|length }} étudiant(s){% if search %} pour « {{ search }} »{% endif %}</h5>
+    </div>
+    <div class="table-card-body">
+        {% if etudiants|length > 0 %}
+            <table class="table-soutenance">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom complet</th>
+                        <th>Email</th>
+                        <th>Filière</th>
+                        <th>Thème du mémoire</th>
+                        <th>Soutenance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for etudiant in etudiants %}
+                        <tr>
+                            <td>{{ etudiant.id }}</td>
+                            <td><strong>{{ etudiant.nom }} {{ etudiant.prenom }}</strong></td>
+                            <td>{{ etudiant.email }}</td>
+                            <td>{{ etudiant.filiere }}</td>
+                            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                title="{{ etudiant.themeMemoire }}">
+                                {{ etudiant.themeMemoire }}
+                            </td>
+                            <td>
+                                {% if etudiant.soutenance %}
+                                    <span style="color: #2ed573; font-weight:600;">
+                                        <i class="fa fa-check-circle"></i>
+                                        {{ etudiant.soutenance.date|date('d/m/Y') }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: #aaa; font-size: 12px;">Non planifiée</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_etudiant_show', {id: etudiant.id}) }}" class="btn-action btn-view" title="Voir">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ path('admin_etudiant_edit', {id: etudiant.id}) }}" class="btn-action btn-edit" title="Modifier">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('admin_etudiant_delete', {id: etudiant.id}) }}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Supprimer cet étudiant ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ etudiant.id) }}">
+                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-student" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Aucun étudiant enregistré.</p>
+                <a href="{{ path('admin_etudiant_new') }}" class="btn-primary-custom">
+                    <i class="fa fa-plus"></i> Ajouter le premier étudiant
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

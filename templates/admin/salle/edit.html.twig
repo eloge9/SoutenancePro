@@ -1,0 +1,63 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Modifier la salle{% endblock %}
+{% block page_title %}Salles{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Modifier la salle : {{ salle.code }}</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_salle_index') }}">Salles</a> ›
+            Modifier
+        </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <a href="{{ path('admin_salle_show', {id: salle.id}) }}" class="btn-secondary-custom">
+            <i class="fa fa-eye"></i> Voir
+        </a>
+        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="form-card">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.code, 'Code de la salle') }}
+                {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.code) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.capacite, 'Capacité') }}
+                {{ form_widget(form.capacite, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.capacite) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.localisation, 'Localisation') }}
+        {{ form_widget(form.localisation, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.localisation) }}
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary-custom">
+            <i class="fa fa-save"></i> Enregistrer les modifications
+        </button>
+        <a href="{{ path('admin_salle_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-times"></i> Annuler
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}{{ etudiant.nom }} {{ etudiant.prenom }}{% endblock %}
+{% block page_title %}Étudiants{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>{{ etudiant.nom }} {{ etudiant.prenom }}</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_etudiant_index') }}">Étudiants</a> ›
+            Détail
+        </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+        <a href="{{ path('admin_etudiant_edit', {id: etudiant.id}) }}" class="btn-primary-custom">
+            <i class="fa fa-pencil"></i> Modifier
+        </a>
+        <a href="{{ path('admin_etudiant_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="detail-card">
+    <div class="detail-row">
+        <div class="detail-label">Nom complet</div>
+        <div class="detail-value">{{ etudiant.nom }} {{ etudiant.prenom }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Adresse e-mail</div>
+        <div class="detail-value"><a href="mailto:{{ etudiant.email }}">{{ etudiant.email }}</a></div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Filière</div>
+        <div class="detail-value">{{ etudiant.filiere }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Thème du mémoire</div>
+        <div class="detail-value">{{ etudiant.themeMemoire }}</div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Fichier mémoire</div>
+        <div class="detail-value">
+            {% if etudiant.fichierMemoire %}
+                <a href="{{ asset('uploads/memoires/' ~ etudiant.fichierMemoire) }}" target="_blank" class="btn-action btn-view">
+                    <i class="fa fa-download"></i> Télécharger
+                </a>
+            {% else %}
+                <span style="color:#aaa;">Aucun fichier</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="detail-row">
+        <div class="detail-label">Soutenance</div>
+        <div class="detail-value">
+            {% if etudiant.soutenance %}
+                <span style="color: #2ed573; font-weight: 600;">
+                    <i class="fa fa-check-circle"></i>
+                    Planifiée le {{ etudiant.soutenance.date|date('d/m/Y') }} à {{ etudiant.soutenance.heure|date('H:i') }}
+                </span>
+                &nbsp;
+                <a href="{{ path('admin_soutenance_show', {id: etudiant.soutenance.id}) }}" class="btn-action btn-view">
+                    Voir la soutenance
+                </a>
+            {% else %}
+                <span style="color:#aaa;">Aucune soutenance planifiée</span>
+                &nbsp;
+                <a href="{{ path('admin_soutenance_new') }}" class="btn-action btn-view">Planifier</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Suppression -->
+<div style="margin-top: 20px;">
+    <form method="post" action="{{ path('admin_etudiant_delete', {id: etudiant.id}) }}"
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ etudiant.id) }}">
+        <button type="submit" class="btn-danger-custom">
+            <i class="fa fa-trash mr-1"></i> Supprimer cet étudiant
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base_enseignant.html.twig' %}
+
+{% block title %}Mes soutenances{% endblock %}
+{% block page_title %}Mes soutenances{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Mes soutenances</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('enseignant_dashboard') }}">Accueil</a> › Mes soutenances
+        </div>
+    </div>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h5><i class="flaticon-book mr-2"></i> Toutes mes soutenances</h5>
+    </div>
+    <div class="table-card-body">
+        {% if soutenances is defined and soutenances|length > 0 %}
+            <table class="table-soutenance">
+                <thead>
+                    <tr>
+                        <th>Étudiant</th>
+                        <th>Filière</th>
+                        <th>Thème du mémoire</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Salle</th>
+                        <th>Mon rôle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in soutenances %}
+                        <tr>
+                            <td>
+                                <strong>{{ item.soutenance.etudiant.nom }} {{ item.soutenance.etudiant.prenom }}</strong>
+                                <div style="font-size:12px; color:#888;">
+                                    <a href="mailto:{{ item.soutenance.etudiant.email }}">{{ item.soutenance.etudiant.email }}</a>
+                                </div>
+                            </td>
+                            <td>{{ item.soutenance.etudiant.filiere }}</td>
+                            <td style="max-width: 220px;">
+                                <span title="{{ item.soutenance.etudiant.themeMemoire }}">
+                                    {{ item.soutenance.etudiant.themeMemoire|length > 50 ? item.soutenance.etudiant.themeMemoire[:50] ~ '...' : item.soutenance.etudiant.themeMemoire }}
+                                </span>
+                            </td>
+                            <td>{{ item.soutenance.date|date('d/m/Y') }}</td>
+                            <td>{{ item.soutenance.heure|date('H:i') }}</td>
+                            <td>
+                                <span style="font-family:monospace; color:#6c5ffc; font-weight:600;">
+                                    {{ item.soutenance.salle.code }}
+                                </span>
+                                <div style="font-size:11px; color:#888;">{{ item.soutenance.salle.localisation }}</div>
+                            </td>
+                            <td>
+                                {% if item.role == 'Président' %}
+                                    <span class="badge-role badge-president">Président</span>
+                                {% elseif item.role == 'Examinateur' %}
+                                    <span class="badge-role badge-examinateur">Examinateur</span>
+                                {% else %}
+                                    <span class="badge-role badge-encadreur">Encadreur</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-book" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Vous n'avez aucune soutenance assignée pour le moment.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

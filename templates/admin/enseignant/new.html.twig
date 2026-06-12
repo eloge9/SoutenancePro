@@ -1,0 +1,73 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Nouvel enseignant{% endblock %}
+{% block page_title %}Enseignants{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Ajouter un enseignant</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_enseignant_index') }}">Enseignants</a> ›
+            Nouveau
+        </div>
+    </div>
+    <a href="{{ path('admin_enseignant_index') }}" class="btn-secondary-custom">
+        <i class="fa fa-arrow-left"></i> Retour
+    </a>
+</div>
+
+<div class="form-card">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.nom, 'Nom') }}
+                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                {{ form_errors(form.nom) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.prenom, 'Prénom') }}
+                {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                {{ form_errors(form.prenom) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.email, 'Adresse e-mail') }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'email@exemple.com'}}) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.specialite, 'Spécialité') }}
+        {{ form_widget(form.specialite, {'attr': {'class': 'form-control', 'placeholder': 'ex: Génie Logiciel'}}) }}
+        {{ form_errors(form.specialite) }}
+    </div>
+
+    {% if form.compte is defined %}
+    <div class="form-group">
+        {{ form_label(form.compte, 'Compte utilisateur (optionnel)') }}
+        {{ form_widget(form.compte, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.compte) }}
+        <small style="color:#888; font-size:12px;">Associer un compte pour que l'enseignant puisse se connecter.</small>
+    </div>
+    {% endif %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary-custom">
+            <i class="fa fa-save"></i> Enregistrer
+        </button>
+        <a href="{{ path('admin_enseignant_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-times"></i> Annuler
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

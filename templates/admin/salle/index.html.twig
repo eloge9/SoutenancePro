@@ -1,0 +1,77 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Liste des salles{% endblock %}
+{% block page_title %}Salles{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Liste des salles</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Salles
+        </div>
+    </div>
+    <a href="{{ path('admin_salle_new') }}" class="btn-primary-custom">
+        <i class="fa fa-plus"></i> Ajouter une salle
+    </a>
+</div>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h5><i class="flaticon-location mr-2"></i> {{ salles|length }} salle(s)</h5>
+    </div>
+    <div class="table-card-body">
+        {% if salles|length > 0 %}
+            <table class="table-soutenance">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Capacité</th>
+                        <th>Localisation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salle in salles %}
+                        <tr>
+                            <td>{{ salle.id }}</td>
+                            <td>
+                                <strong style="font-family: monospace; font-size: 15px; color: #6c5ffc;">
+                                    {{ salle.code }}
+                                </strong>
+                            </td>
+                            <td>{{ salle.capacite }} places</td>
+                            <td>{{ salle.localisation }}</td>
+                            <td>
+                                <a href="{{ path('admin_salle_show', {id: salle.id}) }}" class="btn-action btn-view" title="Voir">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ path('admin_salle_edit', {id: salle.id}) }}" class="btn-action btn-edit" title="Modifier">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('admin_salle_delete', {id: salle.id}) }}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Supprimer cette salle ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ salle.id) }}">
+                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-location" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Aucune salle enregistrée.</p>
+                <a href="{{ path('admin_salle_new') }}" class="btn-primary-custom">
+                    <i class="fa fa-plus"></i> Ajouter la première salle
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

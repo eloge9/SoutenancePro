@@ -1,0 +1,154 @@
+{% extends 'base_enseignant.html.twig' %}
+
+{% block title %}Mes jurys{% endblock %}
+{% block page_title %}Mes jurys{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Mes jurys</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('enseignant_dashboard') }}">Accueil</a> › Mes jurys
+        </div>
+    </div>
+</div>
+
+<!-- Président -->
+{% if soutenancesPresident is defined and soutenancesPresident|length > 0 %}
+<div class="table-card" style="margin-bottom: 25px;">
+    <div class="table-card-header" style="border-left: 4px solid #6c5ffc;">
+        <h5>
+            <span class="badge-role badge-president" style="margin-right: 8px;">Président</span>
+            Soutenances où je suis Président du jury
+            <span style="color:#888; font-weight:400; font-size:13px;">({{ soutenancesPresident|length }})</span>
+        </h5>
+    </div>
+    <div class="table-card-body">
+        <table class="table-soutenance">
+            <thead>
+                <tr>
+                    <th>Étudiant</th>
+                    <th>Filière</th>
+                    <th>Thème</th>
+                    <th>Date & Heure</th>
+                    <th>Salle</th>
+                    <th>Examinateur</th>
+                    <th>Encadreur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in soutenancesPresident %}
+                    <tr>
+                        <td><strong>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</strong></td>
+                        <td>{{ s.etudiant.filiere }}</td>
+                        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
+                            title="{{ s.etudiant.themeMemoire }}">{{ s.etudiant.themeMemoire }}</td>
+                        <td>{{ s.date|date('d/m/Y') }} <span style="color:#888;">{{ s.heure|date('H:i') }}</span></td>
+                        <td><span style="font-family:monospace; color:#6c5ffc; font-weight:600;">{{ s.salle.code }}</span></td>
+                        <td>{{ s.examinateur.nom }} {{ s.examinateur.prenom }}</td>
+                        <td>{{ s.encadreur.nom }} {{ s.encadreur.prenom }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Examinateur -->
+{% if soutenancesExaminateur is defined and soutenancesExaminateur|length > 0 %}
+<div class="table-card" style="margin-bottom: 25px;">
+    <div class="table-card-header" style="border-left: 4px solid #2cb0ff;">
+        <h5>
+            <span class="badge-role badge-examinateur" style="margin-right: 8px;">Examinateur</span>
+            Soutenances où je suis Examinateur
+            <span style="color:#888; font-weight:400; font-size:13px;">({{ soutenancesExaminateur|length }})</span>
+        </h5>
+    </div>
+    <div class="table-card-body">
+        <table class="table-soutenance">
+            <thead>
+                <tr>
+                    <th>Étudiant</th>
+                    <th>Filière</th>
+                    <th>Thème</th>
+                    <th>Date & Heure</th>
+                    <th>Salle</th>
+                    <th>Président</th>
+                    <th>Encadreur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in soutenancesExaminateur %}
+                    <tr>
+                        <td><strong>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</strong></td>
+                        <td>{{ s.etudiant.filiere }}</td>
+                        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
+                            title="{{ s.etudiant.themeMemoire }}">{{ s.etudiant.themeMemoire }}</td>
+                        <td>{{ s.date|date('d/m/Y') }} <span style="color:#888;">{{ s.heure|date('H:i') }}</span></td>
+                        <td><span style="font-family:monospace; color:#6c5ffc; font-weight:600;">{{ s.salle.code }}</span></td>
+                        <td>{{ s.president.nom }} {{ s.president.prenom }}</td>
+                        <td>{{ s.encadreur.nom }} {{ s.encadreur.prenom }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Encadreur -->
+{% if soutenancesEncadreur is defined and soutenancesEncadreur|length > 0 %}
+<div class="table-card">
+    <div class="table-card-header" style="border-left: 4px solid #2ed573;">
+        <h5>
+            <span class="badge-role badge-encadreur" style="margin-right: 8px;">Encadreur</span>
+            Soutenances où je suis Encadreur
+            <span style="color:#888; font-weight:400; font-size:13px;">({{ soutenancesEncadreur|length }})</span>
+        </h5>
+    </div>
+    <div class="table-card-body">
+        <table class="table-soutenance">
+            <thead>
+                <tr>
+                    <th>Étudiant</th>
+                    <th>Filière</th>
+                    <th>Thème</th>
+                    <th>Date & Heure</th>
+                    <th>Salle</th>
+                    <th>Président</th>
+                    <th>Examinateur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in soutenancesEncadreur %}
+                    <tr>
+                        <td><strong>{{ s.etudiant.nom }} {{ s.etudiant.prenom }}</strong></td>
+                        <td>{{ s.etudiant.filiere }}</td>
+                        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"
+                            title="{{ s.etudiant.themeMemoire }}">{{ s.etudiant.themeMemoire }}</td>
+                        <td>{{ s.date|date('d/m/Y') }} <span style="color:#888;">{{ s.heure|date('H:i') }}</span></td>
+                        <td><span style="font-family:monospace; color:#6c5ffc; font-weight:600;">{{ s.salle.code }}</span></td>
+                        <td>{{ s.president.nom }} {{ s.president.prenom }}</td>
+                        <td>{{ s.examinateur.nom }} {{ s.examinateur.prenom }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if (soutenancesPresident is not defined or soutenancesPresident|length == 0)
+    and (soutenancesExaminateur is not defined or soutenancesExaminateur|length == 0)
+    and (soutenancesEncadreur is not defined or soutenancesEncadreur|length == 0) %}
+    <div class="table-card">
+        <div class="table-card-body">
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-test" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Vous n'avez aucune participation à un jury pour le moment.</p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Liste des soutenances{% endblock %}
+{% block page_title %}Soutenances{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Soutenances programmées</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> › Soutenances
+        </div>
+    </div>
+    <a href="{{ path('admin_soutenance_new') }}" class="btn-primary-custom">
+        <i class="fa fa-plus"></i> Programmer une soutenance
+    </a>
+</div>
+
+<!-- Filtre par date -->
+<form method="get" action="{{ path('admin_soutenance_index') }}" style="margin-bottom: 20px;">
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; align-items:center;">
+            <label style="font-size:13px; font-weight:600; color:#555; white-space:nowrap;">
+                <i class="fa fa-calendar mr-1"></i> Filtrer par date :
+            </label>
+            <input type="date" name="date" value="{{ dateSearch }}"
+                   style="padding: 9px 12px; border: 1.5px solid #e0e0f0; border-radius: 8px; font-size:14px;">
+        </div>
+        <button type="submit" class="btn-primary-custom" style="padding: 9px 16px;">
+            <i class="fa fa-filter"></i> Filtrer
+        </button>
+        {% if dateSearch %}
+            <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
+                <i class="fa fa-times"></i> Tout afficher
+            </a>
+        {% endif %}
+    </div>
+</form>
+
+<div class="table-card">
+    <div class="table-card-header">
+        <h5><i class="flaticon-schedule mr-2"></i>
+            {{ soutenances|length }} soutenance(s){% if dateSearch %} du {{ dateSearch|date('d/m/Y') }}{% endif %}
+        </h5>
+    </div>
+    <div class="table-card-body">
+        {% if soutenances|length > 0 %}
+            <table class="table-soutenance">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Étudiant</th>
+                        <th>Filière</th>
+                        <th>Date & Heure</th>
+                        <th>Salle</th>
+                        <th>Président</th>
+                        <th>Examinateur</th>
+                        <th>Encadreur</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for soutenance in soutenances %}
+                        <tr>
+                            <td>{{ soutenance.id }}</td>
+                            <td>
+                                <strong>{{ soutenance.etudiant.nom }} {{ soutenance.etudiant.prenom }}</strong>
+                            </td>
+                            <td>{{ soutenance.etudiant.filiere }}</td>
+                            <td>
+                                <div style="font-weight: 600;">{{ soutenance.date|date('d/m/Y') }}</div>
+                                <div style="color: #888; font-size: 12px;">{{ soutenance.heure|date('H:i') }}</div>
+                            </td>
+                            <td>
+                                <span style="font-family:monospace; color: #6c5ffc; font-weight: 600;">
+                                    {{ soutenance.salle.code }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge-role badge-president">
+                                    {{ soutenance.president.nom }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge-role badge-examinateur">
+                                    {{ soutenance.examinateur.nom }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge-role badge-encadreur">
+                                    {{ soutenance.encadreur.nom }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_soutenance_show', {id: soutenance.id}) }}" class="btn-action btn-view" title="Voir">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ path('admin_soutenance_edit', {id: soutenance.id}) }}" class="btn-action btn-edit" title="Modifier">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <form method="post" action="{{ path('admin_soutenance_delete', {id: soutenance.id}) }}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Supprimer cette soutenance ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ soutenance.id) }}">
+                                    <button type="submit" class="btn-action btn-delete" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #aaa;">
+                <i class="flaticon-schedule" style="font-size:40px; margin-bottom:12px; display:block; opacity:0.4;"></i>
+                <p>Aucune soutenance programmée.</p>
+                <a href="{{ path('admin_soutenance_new') }}" class="btn-primary-custom">
+                    <i class="fa fa-plus"></i> Programmer la première soutenance
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

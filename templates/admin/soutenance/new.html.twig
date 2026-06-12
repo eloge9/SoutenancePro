@@ -1,0 +1,98 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Programmer une soutenance{% endblock %}
+{% block page_title %}Soutenances{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Programmer une soutenance</h2>
+        <div class="breadcrumb-custom">
+            <a href="{{ path('admin_dashboard') }}">Accueil</a> ›
+            <a href="{{ path('admin_soutenance_index') }}">Soutenances</a> ›
+            Nouvelle
+        </div>
+    </div>
+    <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
+        <i class="fa fa-arrow-left"></i> Retour
+    </a>
+</div>
+
+<div class="form-card" style="max-width: 800px;">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    <!-- Étudiant -->
+    <div class="form-group">
+        {{ form_label(form.etudiant, 'Étudiant') }}
+        {{ form_widget(form.etudiant, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.etudiant) }}
+    </div>
+
+    <!-- Date & Heure -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.date, 'Date de soutenance') }}
+                {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.date) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.heure, 'Heure de début') }}
+                {{ form_widget(form.heure, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.heure) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Salle -->
+    <div class="form-group">
+        {{ form_label(form.salle, 'Salle') }}
+        {{ form_widget(form.salle, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.salle) }}
+    </div>
+
+    <!-- Jury -->
+    <div style="margin: 20px 0 10px; padding: 12px 0 5px; border-top: 1px solid #f0f0f8;">
+        <strong style="color: #555; font-size: 14px;">
+            <i class="fa fa-users mr-2"></i> Composition du jury
+        </strong>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.president, 'Président') }}
+                {{ form_widget(form.president, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.president) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.examinateur, 'Examinateur') }}
+                {{ form_widget(form.examinateur, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.examinateur) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.encadreur, 'Encadreur') }}
+                {{ form_widget(form.encadreur, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.encadreur) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary-custom">
+            <i class="fa fa-calendar-check-o"></i> Programmer la soutenance
+        </button>
+        <a href="{{ path('admin_soutenance_index') }}" class="btn-secondary-custom">
+            <i class="fa fa-times"></i> Annuler
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
